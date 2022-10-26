@@ -28,6 +28,7 @@ const middleware = (app: express.Application) => {
       })
   );
 
+  // Configure CORS
   app.use(
       cors({
         origin: config.get("cors.allowedOrigins"),
