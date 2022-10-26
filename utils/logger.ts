@@ -23,7 +23,7 @@ const options = {
 // instantiate a new Winston Logger with the settings defined above
 // eslint-disable-line new-cap
 /* eslint new-cap: ["error", { "properties": false }] */
-const logger: winston.Logger = new winston.createLogger({
+const logger: winston.Logger = winston.createLogger({
     /**
      * Application defaults:
      * - File logs enabled in: [production, staging]
@@ -39,13 +39,4 @@ const logger: winston.Logger = new winston.createLogger({
     exitOnError: false, // do not exit on handled exceptions
 });
 
-// create a stream object with a 'write' function that will be used by `morgan`
-logger.stream = {
-    write: function (message, encoding) {
-        // use the 'info' log level so the output will be picked up by both transports (file and console)
-        logger.info(message);
-    },
-};
-
 export default logger
-module.exports = logger;

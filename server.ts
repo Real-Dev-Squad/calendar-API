@@ -16,6 +16,7 @@ global.logger = logger;
  */
 import * as http from "http";
 import app from "./app"
+import ErrnoException = NodeJS.ErrnoException;
 
 /**
  * Get port from environment and store in Express.
@@ -42,7 +43,7 @@ server.on("listening", onListening);
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: ErrnoException) {
   if (error.syscall !== "listen") {
     throw error;
   }
@@ -76,4 +77,4 @@ function onListening() {
   logger.info(`Express API running on port:${port} with environment:${process.env.NODE_ENV}`);
 }
 
-module.exports = server;
+export default server

@@ -1,20 +1,19 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import morgan from "morgan";
 import boom from "express-boom";
 import helmet from "helmet";
 import cors from "cors";
-import contentTypeCheck from "./contentTypeCheck";
+import morganMiddleware from "../utils/httpLogger";
 
 // require middlewares
 require("./passport");
 
-const middleware = (app) => {
+const middleware = (app: express.Application) => {
   // Middleware for sending error responses with express response object. To be required above all middlewares
   app.use(boom());
 
   // Initialise logging middleware
-  app.use(morgan("combined", { stream: logger.stream }));
+  app.use(morganMiddleware);
 
   // Request parsing middlewares
   app.use(express.json());
@@ -39,10 +38,6 @@ const middleware = (app) => {
         optionsSuccessStatus: 200,
       })
   );
-  app.use(contentTypeCheck);
-
-  // Initialise authentication middleware
-  app.use(passport.initialize());
 };
 
-module.exports = middleware;
+export default middleware
