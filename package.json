@@ -2,9 +2,11 @@
   "name": "calendar-api",
   "version": "0.0.0",
   "private": true,
-  "main": "dist",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node ./bin/www"
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node ."
   },
   "dependencies": {
     "config": "^3.3.8",

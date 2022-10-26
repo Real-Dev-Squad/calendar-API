@@ -32,8 +32,8 @@ const logger: winston.Logger = winston.createLogger({
      * Modifications to be made through environment variables defined in config files
      */
     transports: [
-        ...(config.get("enableFileLogs") ? [new winston.transports.File(options.file)] : []),
-        ...(config.get("enableConsoleLogs") ? [new winston.transports.Console(options.console)] : []),
+        ...(config.get("logs.enableFileLogs") ? [new winston.transports.File(options.file)] : []),
+        ...(config.get("logs.enableConsoleLogs") ? [new winston.transports.Console(options.console)] : []),
     ],
 
     exitOnError: false, // do not exit on handled exceptions

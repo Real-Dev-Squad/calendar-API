@@ -5,9 +5,6 @@ import helmet from "helmet";
 import cors from "cors";
 import morganMiddleware from "../utils/httpLogger";
 
-// require middlewares
-require("./passport");
-
 const middleware = (app: express.Application) => {
   // Middleware for sending error responses with express response object. To be required above all middlewares
   app.use(boom());
