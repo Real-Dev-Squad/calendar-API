@@ -2,10 +2,8 @@
  * Initialise globals
  */
 import config from "config";
-global.config = config;
 
-import logger from './utils/logger'
-global.logger = logger;
+import logger from "./utils/logger";
 
 // logger.info(`Initialising newrelic with app name:: ${config.get("integrations.newrelic.appName")}`);
 // Initialise newrelic
@@ -15,14 +13,16 @@ global.logger = logger;
  * Module dependencies.
  */
 import * as http from "http";
-import app from "./app"
+import app from "./app";
 import ErrnoException = NodeJS.ErrnoException;
+global.config = config;
+global.logger = logger;
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = config.get("port");
+const port: number = config.get("port");
 app.set("port", port);
 
 /**
@@ -43,12 +43,12 @@ server.on("listening", onListening);
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error: ErrnoException) {
+function onError(error: ErrnoException): ErrnoException {
   if (error.syscall !== "listen") {
     throw error;
   }
 
-  const bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
+  const bind = `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -73,8 +73,10 @@ function onError(error: ErrnoException) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  logger.info(`Express API running on port:${port} with environment:${process.env.NODE_ENV}`);
+function onListening(): void {
+  logger.info(
+    `Express API running on port:${port} with environment:${process.env.NODE_ENV}`
+  );
 }
 
-export default server
+export default server;

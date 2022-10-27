@@ -1,7 +1,8 @@
-const express = require('express');
+import express from "express";
+import health from "./health";
+
 const router = express.Router();
-import health from './health'
 
 router.get("/health", health);
 
-export default router
+export default router;

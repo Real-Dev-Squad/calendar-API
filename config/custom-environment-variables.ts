@@ -36,7 +36,6 @@ module.exports = {
     privateKey: "PRIVATE_KEY",
   },
 
-
   integrations: {
     newrelic: {
       appName: "INTEGRATIONS_NEWRELIC_APPNAME",

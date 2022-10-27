@@ -6,9 +6,9 @@
  * Documentation: https://github.com/lorenwest/node-config/wiki/Configuration-Files
  */
 
-import { name } from "../package.json"
+import { name } from "../package.json";
 
-const NODE_ENV = process.env.NODE_ENV;
+const NODE_ENV: string | undefined = process.env.NODE_ENV;
 export default {
   port: 3000,
   logs: {
@@ -33,5 +33,5 @@ export default {
       appName: `${name}_${NODE_ENV}`,
       licenseKey: "<newrelicLicenseKey>",
     },
-  }
+  },
 };
