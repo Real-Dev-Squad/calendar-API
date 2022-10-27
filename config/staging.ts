@@ -5,7 +5,7 @@
 
 export default {
   logs: {
-    enableFileLogs: false,
-    enableConsoleLogs: true,
+    enableFileLogs: true,
+    enableConsoleLogs: false,
   },
 };

@@ -119,11 +119,10 @@ dist
 
 # Jetbrains IDE files
 .idea
+*.iml
 
 # VSCode files
 .vscode
 
 # Local config file
 config/local.js
-
-package-lock.json

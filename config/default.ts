@@ -6,11 +6,15 @@
  * Documentation: https://github.com/lorenwest/node-config/wiki/Configuration-Files
  */
 
+import { name } from "../package.json"
+
 const NODE_ENV = process.env.NODE_ENV;
-module.exports = {
+export default {
   port: 3000,
-  enableFileLogs: true,
-  enableConsoleLogs: false,
+  logs: {
+    enableFileLogs: true,
+    enableConsoleLogs: false,
+  },
 
   userAccessToken: {
     cookieName: `session-${NODE_ENV}`,
@@ -20,9 +24,13 @@ module.exports = {
     privateKey: "<privateKey>",
   },
 
+  cors: {
+    allowedOrigins: "*", // Docs: https://www.npmjs.com/package/cors#configuration-options
+  },
+
   integrations: {
     newrelic: {
-      appName: "RCal_API_production",
+      appName: `${name}_${NODE_ENV}`,
       licenseKey: "<newrelicLicenseKey>",
     },
   }

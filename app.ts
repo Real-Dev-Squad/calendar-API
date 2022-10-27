@@ -1,25 +1,32 @@
-import { NextFunction, Request, Response} from "express";
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import createError from 'http-errors'
 import AppMiddlewares from './middlewares'
 import indexRouter from './routes/index'
 
-const app = express();
+// Initialise express
+const app = express()
 
-// Add Middlewares, routes
-AppMiddlewares(app);
-app.use("/", indexRouter);
+// Add Middlewares
+AppMiddlewares(app)
+
+// Add routes
+app.use('/api/v1/', indexRouter)
 
 // catch 404 and forward to error handler
-app.use(function (_req: Request, _res: Response, next: NextFunction) {
-  next(createError(404));
-});
+app.use(function (req: Request, _res: Response, next: NextFunction) {
+  logger.error(`API not found:: ${req.originalUrl}`)
+  next(createError(404))
+})
 
 // error handler
-app.use(function (err: Error, _req: Request, res: , _next: NextFunction) {
-  res.boom.notFound(err);
-});
+app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
+  logger.error(`Error handling the request:: ${req.originalUrl}, error:: `, err)
 
-module.exports = app;
+  const statusCode = err.status || 500
+  res.boom.boomify(err, {
+    statusCode,
+    message: err.message,
+  })
+})
 
 export default app

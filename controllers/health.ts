@@ -6,10 +6,10 @@
  */
 import {Request, Response} from "express";
 
-const healthCheck = (_req: Request, res: Response) => {
+const health = (_req: Request, res: Response) => {
   return res.json({
     uptime: process.uptime(),
   });
 };
 
-export default healthCheck
+export default health
