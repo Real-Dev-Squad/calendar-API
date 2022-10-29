@@ -2,8 +2,10 @@
  * Initialise globals
  */
 import config from "config";
+global.config = config;
 
 import logger from "./utils/logger";
+global.logger = logger;
 
 // logger.info(`Initialising newrelic with app name:: ${config.get("integrations.newrelic.appName")}`);
 // Initialise newrelic
@@ -15,12 +17,7 @@ import logger from "./utils/logger";
 import * as http from "http";
 import app from "./app";
 import ErrnoException = NodeJS.ErrnoException;
-global.config = config;
-global.logger = logger;
 
-/**
- * Get port from environment and store in Express.
- */
 
 const port: number = config.get("port");
 app.set("port", port);

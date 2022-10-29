@@ -10,7 +10,7 @@ const app = express();
 AppMiddlewares(app);
 
 // Add routes
-app.use("/api/v1/", indexRouter);
+app.use("/api/v1", indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, _res: Response, next: NextFunction) {
@@ -25,7 +25,8 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
     err
   );
 
-  const statusCode = err.status || 500;
+  // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+  const statusCode: number = err.status || 500;
   res.boom.boomify(err, {
     statusCode,
     message: err.message,

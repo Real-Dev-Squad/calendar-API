@@ -1,8 +1,8 @@
 import express from "express";
 import health from "./health";
 
-const router = express.Router();
+const app = express();
 
-router.get("/health", health);
+app.use("/health", health);
 
-export default router;
+export default app;

@@ -30,14 +30,13 @@ module.exports = {
     "consistent-return": "error",
     "no-console": "error",
 
-    // @typescript-eslint overrides
-    "@typescript-eslint/restrict-template-expressions": "off",
-
     // Custom mocha rules
     "mocha/no-skipped-tests": "error",
     "mocha/no-exclusive-tests": "error",
 
     // Prettier rules
     "prettier/prettier": "error",
+
+    // @todo: Remove these temporarily allowed rules below once the issues are resolved
   },
 };
