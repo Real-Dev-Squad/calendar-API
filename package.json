@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint . && echo '✔  Your .js files look good.'",
     "lint-fix": "eslint . --fix",
-    "test": "npm run lint && <other test scripts (is any)>",
+    "test": "npm run lint",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node ."

@@ -17,7 +17,7 @@ export default {
   },
 
   userAccessToken: {
-    cookieName: `session-${NODE_ENV}`,
+    cookieName: `session-${String(NODE_ENV)}`,
     ttl: 30 * 24 * 60 * 60, // in seconds
     refreshTtl: 180 * 24 * 60 * 60, // in seconds
     publicKey: "<publicKey>",
@@ -30,7 +30,7 @@ export default {
 
   integrations: {
     newrelic: {
-      appName: `${name}_${NODE_ENV}`,
+      appName: `${name}_${String(NODE_ENV)}`,
       licenseKey: "<newrelicLicenseKey>",
     },
   },
