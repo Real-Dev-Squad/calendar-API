@@ -28,10 +28,23 @@ export default {
     allowedOrigins: "*", // Docs: https://www.npmjs.com/package/cors#configuration-options
   },
 
-  integrations: {
+  services: {
+    rCalUi: {
+      baseUrl: "<baseURL>",
+      routes: {
+        calendar: "/",
+      },
+    },
+  },
+
+  providers: {
     newrelic: {
       appName: `${name}_${String(NODE_ENV)}`,
       licenseKey: "<newrelicLicenseKey>",
+    },
+    googleOauth20: {
+      clientId: "<clientId>",
+      clientSecret: "<clientSecret>",
     },
   },
 };

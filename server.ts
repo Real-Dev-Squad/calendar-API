@@ -7,7 +7,7 @@ global.config = config;
 import logger from "./utils/logger";
 global.logger = logger;
 
-// logger.info(`Initialising newrelic with app name:: ${config.get("integrations.newrelic.appName")}`);
+// logger.info(`Initialising newrelic with app name:: ${config.get("providers.newrelic.appName")}`);
 // Initialise newrelic
 // require("newrelic");
 
