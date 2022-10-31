@@ -9,6 +9,19 @@ export default {
     enableConsoleLogs: true,
   },
 
+  services: {
+    calendarApi: {
+      baseUrl: "http://localhost:3000",
+    },
+
+    rCalUi: {
+      baseUrl: "http://localhost:3000",
+      routes: {
+        calendar: "/",
+      },
+    },
+  },
+
   providers: {
     googleOauth20: {
       authURI: "https://accounts.google.com/o/oauth2/auth",

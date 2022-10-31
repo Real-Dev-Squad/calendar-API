@@ -9,10 +9,10 @@ import logger from '../utils/logger'
  * @param res {Object} - Express response object
  * @param next {Function} - Express middleware function
  */
-const googleAuth = (req: Request, res: Response, next: NextFunction) => {
-  const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
-
+const googleAuthCallback = (req: Request, res: Response, next: NextFunction) => {
   try {
+    const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
+
     return passport.authenticate('google', {}, async (err, accessToken, user) => {
       if (err) {
         logger.error(err)
@@ -58,6 +58,6 @@ const signout = (_req: Request, res: Response) => {
 }
 
 export {
-  googleAuth,
+  googleAuthCallback,
   signout
 }

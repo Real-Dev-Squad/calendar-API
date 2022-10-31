@@ -29,6 +29,10 @@ export default {
   },
 
   services: {
+    calendarApi: {
+      baseUrl: "<baseURL>",
+    },
+
     rCalUi: {
       baseUrl: "<baseURL>",
       routes: {
