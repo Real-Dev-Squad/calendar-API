@@ -3,7 +3,9 @@ import cookieParser from "cookie-parser";
 import boom from "express-boom";
 import helmet from "helmet";
 import cors from "cors";
+import passport from 'passport'
 import morganMiddleware from "../utils/httpLogger";
+import "../providers/google"
 
 const middleware = (app: express.Application): void => {
   // Middleware for sending error responses with express response object. To be required above all middlewares
@@ -36,6 +38,9 @@ const middleware = (app: express.Application): void => {
       optionsSuccessStatus: 200,
     })
   );
+
+  // Initialise authentication middleware
+  app.use(passport.initialize());
 };
 
 export default middleware;

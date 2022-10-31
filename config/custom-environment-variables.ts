@@ -36,10 +36,14 @@ module.exports = {
     privateKey: "PRIVATE_KEY",
   },
 
-  integrations: {
+  providers: {
     newrelic: {
-      appName: "INTEGRATIONS_NEWRELIC_APPNAME",
-      licenseKey: "INTEGRATIONS_NEWRELIC_LICENSEKEY",
+      appName: "PROVIDERS_NEWRELIC_APPNAME",
+      licenseKey: "PROVIDERS_NEWRELIC_LICENSEKEY",
+    },
+    googleOauth20: {
+      clientId: "PROVIDERS_GOOGLEOAUTH20_CLIENTID",
+      clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET"
     },
   },
 };
