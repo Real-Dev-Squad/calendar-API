@@ -45,5 +45,11 @@ module.exports = {
       clientId: "PROVIDERS_GOOGLEOAUTH20_CLIENTID",
       clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET"
     },
+    mySql: {
+      username: "MYSQL_USERNAME",
+      password: "MYSQL_PASSWORD",
+      host: "MYSQL_HOST",
+      name: "MYSQL_NAME"
+    }
   },
 };
