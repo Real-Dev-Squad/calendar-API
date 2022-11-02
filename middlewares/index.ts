@@ -4,10 +4,14 @@ import boom from "express-boom";
 import helmet from "helmet";
 import cors from "cors";
 import passport from 'passport'
+import * as dotenv from 'dotenv';
 import morganMiddleware from "../utils/httpLogger";
 import "../providers/google"
 
 const middleware = (app: express.Application): void => {
+  // Load vars from .env to process.env
+  dotenv.config()
+
   // Middleware for sending error responses with express response object. To be required above all middlewares
   app.use(boom());
 

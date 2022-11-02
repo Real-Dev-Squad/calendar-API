@@ -51,10 +51,7 @@ export default {
       clientSecret: "<clientSecret>",
     },
     mySql: {
-      username: "<MYSQL_USERNAME>",
-      password: "<MYSQL_PASSWORD>",
-      host: "<MYSQL_HOST>",
-      name: "<MYSQL_NAME>"
+      databaseUrl: "<DATABASE_URL>"
     }
   },
 };

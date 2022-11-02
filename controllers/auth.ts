@@ -10,9 +10,9 @@ import logger from '../utils/logger'
  * @param next {Function} - Express middleware function
  */
 const googleAuthCallback = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
+  const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
 
+  try {
     return passport.authenticate('google', {}, async (err, accessToken, user) => {
       if (err) {
         logger.error(err)
@@ -25,9 +25,9 @@ const googleAuthCallback = (req: Request, res: Response, next: NextFunction) => 
       })
 
       // respond with a cookie
-      res.cookie(config.get('userToken.cookieName'), "token", {
+      res.cookie(config.get('userAccessToken.cookieName'), "token", {
         domain: rCalUiUrl.hostname,
-        expires: new Date(Date.now() + config.get('userToken.ttl') * 1000),
+        expires: new Date(Date.now() + config.get('userAccessToken.ttl') * 1000),
         httpOnly: true,
         secure: true,
         sameSite: 'lax'
@@ -37,12 +37,15 @@ const googleAuthCallback = (req: Request, res: Response, next: NextFunction) => 
     })(req, res, next)
   } catch (err) {
     logger.error(err)
-    return res.boom.unauthorized('User cannot be authenticated')
+
+    // Redirect to an error page in case of an error
+    return res.redirect(rCalUiUrl.href)
   }
 }
 
-const signout = (_req: Request, res: Response) => {
-  const cookieName = config.get('userToken.cookieName')
+// Logs out the user from the device
+const logOut = (_req: Request, res: Response) => {
+  const cookieName = config.get('userAccessToken.cookieName')
   const rdsUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
 
   res.clearCookie(cookieName, {
@@ -53,11 +56,11 @@ const signout = (_req: Request, res: Response) => {
   })
 
   return res.json({
-    message: 'Signout successful'
+    message: 'SignOut successful'
   })
 }
 
 export {
   googleAuthCallback,
-  signout
+  logOut
 }

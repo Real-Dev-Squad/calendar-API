@@ -5,23 +5,23 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// "mysql://root:@localhost:3306/RCal1"
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 // User model
-model User {
-  id            Int      @id @default(autoincrement())
-  email         String   @unique
-  password      String?
-  username      String?
-  firstname     String?
-  lastname      String?
-  bio           String?
-  emailVerified Boolean  @default(false)
-  isDeleted     Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+model Users {
+  id              Int      @id @default(autoincrement())
+  email           String   @unique
+  password        String?
+  username        String?
+  firstname       String?
+  lastname        String?
+  bio             String?
+  googleProfileId String?
+  emailVerified   Boolean  @default(false)
+  isDeleted       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
