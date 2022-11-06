@@ -1,23 +1,12 @@
-/**
- * Initialise globals
- */
 import config from "config";
-global.config = config;
-
 import logger from "./utils/logger";
-global.logger = logger;
-
-// logger.info(`Initialising newrelic with app name:: ${config.get("providers.newrelic.appName")}`);
-// Initialise newrelic
-// require("newrelic");
-
-/**
- * Module dependencies.
- */
 import * as http from "http";
 import app from "./app";
 import ErrnoException = NodeJS.ErrnoException;
 
+// Initialise globals
+global.config = config;
+global.logger = logger;
 
 const port: number = config.get("port");
 app.set("port", port);
@@ -72,7 +61,9 @@ function onError(error: ErrnoException): ErrnoException {
 
 function onListening(): void {
   logger.info(
-    `Express API running on port:${port} with environment:${process.env.NODE_ENV}`
+    `Express API running on port:${port} with environment:${String(
+      process.env.NODE_ENV
+    )}`
   );
 }
 

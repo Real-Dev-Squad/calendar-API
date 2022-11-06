@@ -20,9 +20,10 @@ module.exports = {
       __name: "LOGS_ENABLE_CONSOLE_LOGS",
       __format: "boolean",
     },
+    logLevel: "LOGS_LOG_LEVEL"
   },
 
-  userToken: {
+  userAccessToken: {
     cookieName: "USER_TOKEN_COOKIE_NAME",
     ttl: {
       __name: "USER_TOKEN_TTL",
@@ -43,7 +44,10 @@ module.exports = {
     },
     googleOauth20: {
       clientId: "PROVIDERS_GOOGLEOAUTH20_CLIENTID",
-      clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET"
+      clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET",
+    },
+    mySql: {
+      databaseUrl: "DATABASE_URL",
     },
   },
 };

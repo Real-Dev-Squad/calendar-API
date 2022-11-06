@@ -38,5 +38,6 @@ module.exports = {
     "prettier/prettier": "error",
 
     // @todo: Remove these temporarily allowed rules below once the issues are resolved
+    "@typescript-eslint/strict-boolean-expressions": "off",
   },
 };

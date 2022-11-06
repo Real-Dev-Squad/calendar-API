@@ -8,4 +8,10 @@ export default {
     enableFileLogs: true,
     enableConsoleLogs: false,
   },
+
+  services: {
+    rCalUi: {
+      baseUrl: "https://rds-website-calendar.fly.dev",
+    },
+  },
 };
