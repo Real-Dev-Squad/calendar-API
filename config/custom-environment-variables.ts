@@ -37,6 +37,16 @@ module.exports = {
     privateKey: "PRIVATE_KEY",
   },
 
+  services: {
+    calendarApi: {
+      baseUrl: "SERVICES_CALENDARAPI_BASEURL",
+    },
+
+    rCalUi: {
+      baseUrl: "SERVICES_RCALUI_BASEURL",
+    },
+  },
+
   providers: {
     newrelic: {
       appName: "PROVIDERS_NEWRELIC_APPNAME",

@@ -12,8 +12,8 @@ const NODE_ENV: string | undefined = process.env.NODE_ENV;
 export default {
   port: 3000,
   logs: {
-    enableFileLogs: true,
-    enableConsoleLogs: false,
+    enableFileLogs: false,
+    enableConsoleLogs: true,
     logLevel: "http"
   },
 
