@@ -5,8 +5,8 @@
 
 export default {
   logs: {
-    enableFileLogs: true,
-    enableConsoleLogs: false,
+    enableFileLogs: false,
+    enableConsoleLogs: true,
   },
 
   services: {
