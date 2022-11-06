@@ -11,9 +11,9 @@ import { Users } from '@prisma/client'
  * @return {String} - Generated JWT
  */
 const generateAuthToken = (payload: jwtPayload): string => {
-  return jwt.sign(payload, config.get('userToken.privateKey'), {
+  return jwt.sign(payload, config.get('userAccessToken.privateKey'), {
     algorithm: 'RS256',
-    expiresIn: config.get('userToken.ttl')
+    expiresIn: config.get('userAccessToken.ttl')
   })
 }
 
@@ -24,7 +24,7 @@ const generateAuthToken = (payload: jwtPayload): string => {
  * @return {Object} - Decode value of JWT
  */
 const verifyAuthToken = (token: string): any => {
-  return jwt.verify(token, config.get('userToken.publicKey'), { algorithms: ['RS256'] })
+  return jwt.verify(token, config.get('userAccessToken.publicKey'), { algorithms: ['RS256'] })
 }
 
 /**
@@ -37,9 +37,13 @@ const decodeAuthToken = (token: string) : any => {
   return jwt.decode(token)
 }
 
+/**
+ * Login or signUp with Google
+ * @param googleProfile{Object} : Google profile response from Google OAuth2.0
+ */
 const loginOrSignupWithGoogle = async (
   googleProfile: GoogleOAuthJson
-): Promise<Users | undefined> => {
+): Promise<Users> => {
   try {
     const user = await prisma.users.findUnique({
       where: {
@@ -68,7 +72,7 @@ const loginOrSignupWithGoogle = async (
       err
     })
 
-    return
+    throw new Error("")
   }
 }
 

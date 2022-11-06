@@ -1,7 +1,7 @@
 import passport from "passport";
 import { NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
-import { loginOrSignupWithGoogle } from "../services/authService";
+import * as authService from "../services/authService";
 
 /**
  * Fetches the user info from Google and authenticates User
@@ -21,21 +21,18 @@ const googleAuthCallback = (
     return passport.authenticate(
       "google",
       {},
-      async (err, accessToken, user) => {
+      async (err, _, user) => {
         if (err) {
           logger.error(err);
           return res.boom.unauthorized("User cannot be authenticated");
         }
 
-        const userData = await loginOrSignupWithGoogle(user._json);
+        const userData = await authService.loginOrSignupWithGoogle(user._json);
 
-        logger.info("google data:: ", {
-          accessToken,
-          userData,
-        });
+        const token = authService.generateAuthToken({ userId: userData?.id });
 
         // respond with a cookie
-        res.cookie(config.get("userAccessToken.cookieName"), "token", {
+        res.cookie(config.get("userAccessToken.cookieName"), token, {
           domain: rCalUiUrl.hostname,
           expires: new Date(
             Date.now() + config.get("userAccessToken.ttl") * 1000

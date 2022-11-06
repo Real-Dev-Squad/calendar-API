@@ -1,6 +1,6 @@
 // Add types for service
 interface jwtPayload {
-  userId: String
+  userId: number
 }
 
 export { jwtPayload };

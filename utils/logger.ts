@@ -4,7 +4,7 @@ import config from "config";
 // define the custom settings for each transport (file, console)
 const options = {
   file: {
-    level: "info",
+    level: String(config.get("logs.logLevel")),
     filename: "logs/app.log",
     handleExceptions: true,
     json: true,
@@ -13,7 +13,7 @@ const options = {
     colorize: false,
   },
   console: {
-    level: "info",
+    level: String(config.get("logs.logLevel")),
     handleExceptions: true,
     json: false,
     colorize: true,

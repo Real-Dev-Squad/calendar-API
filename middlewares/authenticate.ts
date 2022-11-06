@@ -17,7 +17,7 @@ import { NextFunction, Request, Response } from 'express'
  */
 const authenticate = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    let token = req.cookies[config.get('userToken.cookieName')]
+    let token = req.cookies[config.get('userAccessToken.cookieName')]
 
     /**
      * Enable Bearer Token authentication for NON-PRODUCTION environments
@@ -27,32 +27,31 @@ const authenticate = async (req: Request, res: Response, next: NextFunction) => 
       token = req.get('authorization')?.split(' ')[1]
     }
 
-    console.log('=====>', authService.decodeAuthToken(token))
-    console.log('=====>', authService.verifyAuthToken(token))
+    const { userId } = authService.verifyAuthToken(token)
 
     // add user data to `req.userData` for further use
     req.userData = await prisma.users.findUnique({
       where: {
-        id: 1
+        id: userId
       }
     })
 
     return next()
   } catch (err: any) {
-    logger.error('Error in verifying user token', { err })
+    logger.error('Error in verifying user token', { error: err.stack })
 
     if (err.name === 'TokenExpiredError') {
-      const refreshTtl = config.get('userToken.refreshTtl')
-      const token = req.cookies[config.get('userToken.cookieName')]
+      const refreshTtl = config.get('userAccessToken.refreshTtl')
+      const token = req.cookies[config.get('userAccessToken.cookieName')]
       const { userId, iat } = authService.decodeAuthToken(token)
       const newToken = authService.generateAuthToken({ userId })
       const rdsUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
 
       // add new JWT to the response if it satisfies the refreshTtl time
       if (Math.floor(Date.now() / 1000) - iat <= refreshTtl) {
-        res.cookie(config.get('userToken.cookieName'), newToken, {
+        res.cookie(config.get('userAccessToken.cookieName'), newToken, {
           domain: rdsUiUrl.hostname,
-          expires: new Date(Date.now() + config.get('userToken.ttl') * 1000),
+          expires: new Date(Date.now() + config.get('userAccessToken.ttl') * 1000),
           httpOnly: true,
           secure: true,
           sameSite: 'lax'

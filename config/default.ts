@@ -14,6 +14,7 @@ export default {
   logs: {
     enableFileLogs: true,
     enableConsoleLogs: false,
+    logLevel: "http"
   },
 
   userAccessToken: {
