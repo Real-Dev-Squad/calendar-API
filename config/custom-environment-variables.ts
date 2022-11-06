@@ -37,6 +37,10 @@ module.exports = {
     privateKey: "PRIVATE_KEY",
   },
 
+  cors: {
+    allowedOrigins: "CORS_ALLOWEDORIGINS"
+  },
+
   services: {
     calendarApi: {
       baseUrl: "SERVICES_CALENDARAPI_BASEURL",
