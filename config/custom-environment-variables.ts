@@ -43,10 +43,10 @@ module.exports = {
     },
     googleOauth20: {
       clientId: "PROVIDERS_GOOGLEOAUTH20_CLIENTID",
-      clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET"
+      clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET",
     },
     mySql: {
-      databaseUrl: "DATABASE_URL"
-    }
+      databaseUrl: "DATABASE_URL",
+    },
   },
 };

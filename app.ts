@@ -27,7 +27,7 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
 
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const statusCode: number = err.status || 500;
-  res.boom.boomify(err, {
+  return res.boom.boomify(err, {
     statusCode,
     message: err.message,
   });

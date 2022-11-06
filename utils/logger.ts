@@ -1,4 +1,5 @@
 import winston from "winston";
+import config from "config";
 
 // define the custom settings for each transport (file, console)
 const options = {
