@@ -14,20 +14,22 @@ export default {
   logs: {
     enableFileLogs: false,
     enableConsoleLogs: true,
-    logLevel: "http"
+    logLevel: "http",
   },
 
   userAccessToken: {
     cookieName: `session-${String(NODE_ENV)}`,
     ttl: 30 * 24 * 60 * 60, // in seconds
     refreshTtl: 180 * 24 * 60 * 60, // in seconds
-    publicKey: "-----BEGIN PUBLIC KEY-----\n" +
+    publicKey:
+      "-----BEGIN PUBLIC KEY-----\n" +
       "MIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgH0apOTUQgD7pdgJ47HkB7r/1dkX\n" +
       "crYa/g1Lw5ax3S1KN6aQ070ZESX4xQdUIMfqZ1dLpyZ5yF2lPBYaKSB73ms8IkGe\n" +
       "fh1UePu5SYUep/H8mjTbuhS1Agmf+T4fsmoMBB8BIwGawJcC2qgIzlDHDsnr2lM/\n" +
       "0nMRSONlCxNZOQHvAgMBAAE=\n" +
       "-----END PUBLIC KEY-----",
-    privateKey: "-----BEGIN RSA PRIVATE KEY-----\n" +
+    privateKey:
+      "-----BEGIN RSA PRIVATE KEY-----\n" +
       "MIICWwIBAAKBgH0apOTUQgD7pdgJ47HkB7r/1dkXcrYa/g1Lw5ax3S1KN6aQ070Z\n" +
       "ESX4xQdUIMfqZ1dLpyZ5yF2lPBYaKSB73ms8IkGefh1UePu5SYUep/H8mjTbuhS1\n" +
       "Agmf+T4fsmoMBB8BIwGawJcC2qgIzlDHDsnr2lM/0nMRSONlCxNZOQHvAgMBAAEC\n" +

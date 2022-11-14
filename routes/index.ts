@@ -1,7 +1,7 @@
 import express from "express";
 import health from "./health";
 import auth from "./auth";
-import users from "./users"
+import users from "./users";
 
 const app = express();
 

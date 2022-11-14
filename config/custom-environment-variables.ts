@@ -20,7 +20,7 @@ module.exports = {
       __name: "LOGS_ENABLE_CONSOLE_LOGS",
       __format: "boolean",
     },
-    logLevel: "LOGS_LOG_LEVEL"
+    logLevel: "LOGS_LOG_LEVEL",
   },
 
   userAccessToken: {
@@ -38,7 +38,7 @@ module.exports = {
   },
 
   cors: {
-    allowedOrigins: "CORS_ALLOWEDORIGINS"
+    allowedOrigins: "CORS_ALLOWEDORIGINS",
   },
 
   services: {

@@ -12,16 +12,62 @@ datasource db {
 
 // User model
 model Users {
-  id              Int      @id @default(autoincrement())
-  email           String   @unique
+  id              Int           @id @default(autoincrement())
+  email           String        @unique
   password        String?
-  username        String?  @unique
+  username        String?       @unique
   firstname       String?
   lastname        String?
   bio             String?
   googleProfileId String?
-  emailVerified   Boolean  @default(false)
-  isDeleted       Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  emailVerified   Boolean       @default(false)
+  isDeleted       Boolean       @default(false)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  Calendar        Calendar[]
+  EventType       EventType[]
+  ParentEvent     ParentEvent[]
+  Attendees       Attendees[]
+}
+
+model Calendar {
+  id        Int     @id @default(autoincrement())
+  name      String
+  ownerId   Int
+  owner     Users?  @relation(fields: [ownerId], references: [id])
+  isDeleted Boolean
+}
+
+model EventType {
+  id           Int           @id @default(autoincrement())
+  name         String
+  appGenerated Boolean
+  ownerId      Int
+  owner        Users?        @relation(fields: [ownerId], references: [id])
+  isDeleted    Boolean
+  ParentEvent  ParentEvent[]
+}
+
+model ParentEvent {
+  id           Int         @id @default(autoincrement())
+  name         String
+  description  String?
+  ownerId      Int
+  owner        Users?      @relation(fields: [ownerId], references: [id])
+  eventTypeId  Int
+  eventType    EventType?  @relation(fields: [eventTypeId], references: [id])
+  location     String?
+  startTime    DateTime
+  endTime      DateTime
+  appGenerated Boolean
+  isDeleted    Boolean
+  Attendees    Attendees[]
+}
+
+model Attendees {
+  id         Int         @id @default(autoincrement())
+  eventId    Int
+  event      ParentEvent @relation(fields: [eventId], references: [id])
+  attendeeId Int
+  attendee   Users       @relation(fields: [attendeeId], references: [id])
 }
