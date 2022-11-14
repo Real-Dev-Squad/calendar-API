@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { GoogleOAuthJson } from '../@types/providers'
+import { GoogleOAuthJson, MicrosoftOAuthJson } from '../@types/providers'
 import prisma from '../prisma/prisma'
 import { jwtPayload } from '../@types/services'
 import { Users } from '@prisma/client'
@@ -76,9 +76,49 @@ const loginOrSignupWithGoogle = async (
   }
 }
 
+/**
+ * Login or signUp with Microsoft
+ * @param microsoftProfile{Object} : Microsoft profile response from Microsoft OAuth2.0
+ */
+ const loginOrSignupWithMicrosoft = async (
+  microsoftProfile: MicrosoftOAuthJson
+): Promise<Users> => {
+  try {
+    const user = await prisma.users.findUnique({
+      where: {
+        email: microsoftProfile.mail ?? microsoftProfile?.userPrincipalName
+      }
+    })
+
+    if (user) {
+      return user
+    } else {
+      logger.info(`User with email ${microsoftProfile?.userPrincipalName} does not exist. Creating new account.`)
+      const createdUser = await prisma.users.create({
+        data: {
+          email: microsoftProfile.mail ?? microsoftProfile?.userPrincipalName,
+          firstname: microsoftProfile?.givenName,
+          lastname: microsoftProfile?.surname,
+          emailVerified: true,
+          microsoftProfileId: microsoftProfile?.id
+        }
+      })
+      
+      return createdUser
+    }
+  } catch (err) {
+    logger.error('loginOrSignupWithGoogle:: Error in authenticating user', {
+      err
+    })
+
+    throw new Error("")
+  }
+}
+
 export {
   generateAuthToken,
   verifyAuthToken,
   decodeAuthToken,
-  loginOrSignupWithGoogle
+  loginOrSignupWithGoogle,
+  loginOrSignupWithMicrosoft
 }

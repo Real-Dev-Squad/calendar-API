@@ -60,6 +60,10 @@ module.exports = {
       clientId: "PROVIDERS_GOOGLEOAUTH20_CLIENTID",
       clientSecret: "PROVIDERS_GOOGLEOAUTH20_CLIENTSECRET",
     },
+    microsoftOauth20: {
+      clientId: "PROVIDERS_MICROSOFTOAUTH20_CLIENTID",
+      clientSecret: "PROVIDERS_MICROSOFTOAUTH20_CLIENTSECRET",
+    },
     mySql: {
       databaseUrl: "DATABASE_URL",
     },

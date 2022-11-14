@@ -12,4 +12,14 @@ interface GoogleOAuthJson {
   hd: string;
 }
 
-export { GoogleOAuthJson };
+interface MicrosoftOAuthJson {
+  id: string;
+  surname: string;
+  givenName: string;
+  displayName: string;
+  mail: string;
+  userPrincipalName: string;
+  email_verified: boolean;
+}
+
+export { GoogleOAuthJson, MicrosoftOAuthJson };
