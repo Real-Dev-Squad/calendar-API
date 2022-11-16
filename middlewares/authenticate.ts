@@ -19,7 +19,7 @@ const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Express.BoomError<null> | void> => {
+) => {
   try {
     let token = req.cookies[config.get("userAccessToken.cookieName")];
 
