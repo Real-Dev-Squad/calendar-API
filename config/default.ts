@@ -70,6 +70,10 @@ export default {
       clientId: "<clientId>",
       clientSecret: "<clientSecret>",
     },
+    microsoftOauth20: {
+      clientId: "<clientId>",
+      clientSecret: "<clientSecret>",
+    },
     mySql: {
       databaseUrl: "<DATABASE_URL>",
     },
