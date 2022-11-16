@@ -2,7 +2,7 @@ import passport from "passport";
 import config from "config";
 import { Strategy as MicrosoftStrategy } from "passport-microsoft";
 
-const MICROSOFT_AUTH_CALLBACK = "/api/v1/auth/microsoft/callback"
+const MICROSOFT_AUTH_CALLBACK = "/api/v1/auth/microsoft/callback";
 
 passport.use(
   new MicrosoftStrategy(

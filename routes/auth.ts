@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { googleAuthCallback, microsoftAuthCallback, logOut } from "../controllers/auth";
+import {
+  googleAuthCallback,
+  microsoftAuthCallback,
+  logOut,
+} from "../controllers/auth";
 import passport from "passport";
 
 const router = Router();
