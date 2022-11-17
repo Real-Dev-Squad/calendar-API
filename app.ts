@@ -11,8 +11,8 @@ const app = express();
 AppMiddlewares(app);
 
 // Add routes
-app.get("/", health)
 app.use("/api/v1", indexRouter);
+app.get("/", health)
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, _res: Response, next: NextFunction) {
