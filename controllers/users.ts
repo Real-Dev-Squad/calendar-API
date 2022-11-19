@@ -10,7 +10,7 @@ import { Users } from "@prisma/client";
 const getSelfData = (
   req: Request,
   res: Response
-): Response | Express.BoomError<any> => {
+): Response<any, Record<string, any>> | Express.BoomError<null> => {
   try {
     if (req.userData) {
       const fullUserDataAll: Users = req.userData;

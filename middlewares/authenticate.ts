@@ -19,7 +19,8 @@ const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Promise<any | Express.BoomError<null>> => {
+  // @Todo: Need to fix this return type "any"
   try {
     let token = req.cookies[config.get("userAccessToken.cookieName")];
 
