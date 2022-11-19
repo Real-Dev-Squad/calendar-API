@@ -1,6 +1,6 @@
-import * as authService from '../services/authService'
-import prisma from '../prisma/prisma'
-import { NextFunction, Request, Response } from 'express'
+import * as authService from "../services/authService";
+import prisma from "../prisma/prisma";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Middleware to validate the authenticated routes
@@ -15,65 +15,74 @@ import { NextFunction, Request, Response } from 'express'
  * @param next {Function} - Express middleware function
  * @return {Object} - Returns unauthenticated object if token is invalid
  */
-const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<any | Express.BoomError<null>> => {
+  // @Todo: Need to fix this return type "any"
   try {
-    let token = req.cookies[config.get('userAccessToken.cookieName')]
+    let token = req.cookies[config.get("userAccessToken.cookieName")];
 
     /**
      * Enable Bearer Token authentication for NON-PRODUCTION environments
      * This is enabled just to ease the authentication in the non-production environments
      */
-    if (process.env.NODE_ENV !== 'production' && !token) {
-      token = req.get('authorization')?.split(' ')[1]
+    if (process.env.NODE_ENV !== "production" && !token) {
+      token = req.get("authorization")?.split(" ")[1];
     }
 
-    const { userId } = authService.verifyAuthToken(token)
+    const { userId } = authService.verifyAuthToken(token);
 
     // add user data to `req.userData` for further use
     req.userData = await prisma.users.findUnique({
       where: {
-        id: userId
-      }
-    })
+        id: userId,
+      },
+    });
 
-    return next()
+    return next();
   } catch (err: any) {
-    logger.error('Error in verifying user token', { error: err.stack })
+    logger.error("Error in verifying user token", { error: err.stack });
 
-    if (err.name === 'TokenExpiredError') {
-      const refreshTtl = config.get('userAccessToken.refreshTtl')
-      const token = req.cookies[config.get('userAccessToken.cookieName')]
-      const { userId, iat } = authService.decodeAuthToken(token)
-      const newToken = authService.generateAuthToken({ userId })
-      const rdsUiUrl = new URL(config.get('services.rCalUi.baseUrl'))
+    if (err.name === "TokenExpiredError") {
+      const refreshTtl = config.get("userAccessToken.refreshTtl");
+      const token = req.cookies[config.get("userAccessToken.cookieName")];
+      const { userId, iat } = authService.decodeAuthToken(token);
+      const newToken = authService.generateAuthToken({ userId });
+      const rdsUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
 
       // add new JWT to the response if it satisfies the refreshTtl time
       if (Math.floor(Date.now() / 1000) - iat <= refreshTtl) {
-        res.cookie(config.get('userAccessToken.cookieName'), newToken, {
+        res.cookie(config.get("userAccessToken.cookieName"), newToken, {
           domain: rdsUiUrl.hostname,
-          expires: new Date(Date.now() + config.get('userAccessToken.ttl') * 1000),
+          expires: new Date(
+            Date.now() + config.get("userAccessToken.ttl") * 1000
+          ),
           httpOnly: true,
           secure: true,
-          sameSite: 'lax'
-        })
+          sameSite: "lax",
+        });
 
         // add user data to `req.userData` for further use
         req.userData = await prisma.users.findUnique({
           where: {
-            id: userId
-          }
-        })
+            id: userId,
+          },
+        });
 
-        return next()
+        return next();
       } else {
-        logger.error('User cannot be authenticated as refreshTtl has passed.', { userId })
-        return res.boom.unauthorized('Unauthenticated User')
+        logger.error("User cannot be authenticated as refreshTtl has passed.", {
+          userId,
+        });
+        return res.boom.unauthorized("Unauthenticated User");
       }
     } else {
-      logger.error('User cannot be authenticated.', { err })
-      return res.boom.unauthorized('Unauthenticated User')
+      logger.error("User cannot be authenticated.", { err });
+      return res.boom.unauthorized("Unauthenticated User");
     }
   }
-}
+};
 
-export default authenticate
+export default authenticate;
