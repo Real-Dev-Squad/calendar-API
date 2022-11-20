@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
 import AppMiddlewares from "./middlewares";
 import indexRouter from "./routes/index";
-import health from './controllers/health'
+import health from "./controllers/health";
 
 // Initialise express
 const app = express();
@@ -12,7 +12,7 @@ AppMiddlewares(app);
 
 // Add routes
 app.use("/api/v1", indexRouter);
-app.get("/", health)
+app.get("/", health);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, _res: Response, next: NextFunction) {

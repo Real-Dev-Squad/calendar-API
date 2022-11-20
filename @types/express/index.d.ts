@@ -6,5 +6,9 @@ declare global {
     interface Request {
       userData?: Users | null;
     }
+
+    interface Response {
+      boom?: Boom;
+    }
   }
 }
