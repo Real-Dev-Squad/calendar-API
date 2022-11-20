@@ -2,6 +2,6 @@ import config from "config";
 import winston from "winston";
 
 declare global {
-  let config: config;
-  let logger: winston.Logger;
+  var config: config;
+  var logger: winston.Logger;
 }
