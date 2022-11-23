@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getSelfData } from "../controllers/users";
+import { getSelfData, patchSelfData } from "../controllers/users";
 import authenticate from "../middlewares/authenticate";
 
 const router = Router();
@@ -11,5 +11,6 @@ const router = Router();
  * */
 // eslint-disable-next-line
 router.get("/self", authenticate, getSelfData);
+router.patch("/self", authenticate, patchSelfData);
 
 export default router;
