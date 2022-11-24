@@ -39,7 +39,7 @@ model Calendar {
   name      String
   ownerId   Int
   owner     Users?  @relation(fields: [ownerId], references: [id])
-  isDeleted Boolean
+  isDeleted Boolean @default(false)
 }
 
 model EventType {
@@ -48,7 +48,7 @@ model EventType {
   appGenerated Boolean
   ownerId      Int
   owner        Users?        @relation(fields: [ownerId], references: [id])
-  isDeleted    Boolean
+  isDeleted    Boolean       @default(false)
   ParentEvent  ParentEvent[]
   ChildEvent   ChildEvent[]
 }
@@ -61,7 +61,7 @@ model ParentEvent {
   owner          Users?           @relation(fields: [ownerId], references: [id])
   eventTypeId    Int
   eventType      EventType?       @relation(fields: [eventTypeId], references: [id])
-  isDeleted      Boolean
+  isDeleted      Boolean          @default(false)
   ChildEvent     ChildEvent[]
   RecurringEvent RecurringEvent[]
 }
@@ -75,7 +75,7 @@ model ChildEvent {
   endTime       DateTime
   parentEventID Int
   parentEvent   ParentEvent @relation(fields: [parentEventID], references: [id])
-  isDeleted     Boolean
+  isDeleted     Boolean     @default(false)
   Attendees     Attendees[]
   Users         Users?      @relation(fields: [usersId], references: [id])
   usersId       Int?
