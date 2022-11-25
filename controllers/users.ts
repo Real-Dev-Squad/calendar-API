@@ -43,13 +43,17 @@ const patchSelfData = async (
 ): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
   try {
     const userId = req.userData?.id;
-    const { body } = req;
+    const { firstname, lastname, bio, username } = req.body;
     await prisma.users.update({
       where: {
         id: userId,
       },
+      // Allowed fields to edit from patch call
       data: {
-        ...body,
+        firstname,
+        lastname,
+        bio,
+        username,
       },
     });
 
