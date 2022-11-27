@@ -42,19 +42,31 @@ const patchSelfData = async (
   res: Response
 ): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
   try {
-    const userId = req.userData?.id;
-    const { firstname, lastname, bio, username } = req.body;
+    const { userData } = req;
+    const userId = userData?.id;
+    const onboardingUserData: any = userData?.onboarding;
+    const { firstname, lastname, bio, username, onboarding } = req.body;
+    const { isOnboarded } = onboarding ?? {};
+
+    // Allowed fields to edit from patch call
+    const data = {
+      firstname,
+      lastname,
+      bio,
+      username,
+      onboarding: {
+        isOnboarded:
+          isOnboarded !== undefined
+            ? isOnboarded
+            : onboardingUserData.isOnboarded,
+      },
+    };
+
     await prisma.users.update({
       where: {
         id: userId,
       },
-      // Allowed fields to edit from patch call
-      data: {
-        firstname,
-        lastname,
-        bio,
-        username,
-      },
+      data,
     });
 
     logger.error("User data updated");
