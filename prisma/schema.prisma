@@ -25,8 +25,7 @@ model Users {
   microsoftProfileId String?
   emailVerified      Boolean       @default(false)
   isDeleted          Boolean       @default(false)
-  isNew              Boolean       @default(true)
-  isOnboarded        Boolean       @default(false)
+  onboarding         Json?
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
   Calendar           Calendar[]

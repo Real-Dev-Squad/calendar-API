@@ -65,6 +65,7 @@ const loginOrSignupWithGoogle = async (
           firstname: googleProfile?.given_name,
           lastname: googleProfile?.family_name,
           emailVerified: true,
+          onboarding: { isOnboarded: false },
           googleProfileId: googleProfile?.sub,
         },
       });
@@ -106,6 +107,7 @@ const loginOrSignupWithMicrosoft = async (
           firstname: microsoftProfile?.givenName,
           lastname: microsoftProfile?.surname,
           emailVerified: true,
+          onboarding: { isOnboarded: false },
           microsoftProfileId: microsoftProfile?.id,
         },
       });
