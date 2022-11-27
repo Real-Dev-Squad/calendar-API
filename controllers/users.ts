@@ -21,7 +21,7 @@ const getSelfData = (
         firstname: fullUserDataAll.firstname,
         lastname: fullUserDataAll.lastname,
         bio: fullUserDataAll.bio,
-        onboarded: fullUserDataAll.onboarding,
+        onboarding: fullUserDataAll.onboarding,
         emailVerified: fullUserDataAll.emailVerified,
       };
 
