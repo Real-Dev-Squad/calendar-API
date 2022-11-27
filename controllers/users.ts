@@ -22,6 +22,8 @@ const getSelfData = (
         lastname: fullUserDataAll.lastname,
         bio: fullUserDataAll.bio,
         emailVerified: fullUserDataAll.emailVerified,
+        isNew: fullUserDataAll.isNew,
+        isOnboarded: fullUserDataAll.isOnboarded,
       };
 
       return res.json(userData);
