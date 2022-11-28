@@ -30,7 +30,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-microsoft": "^1.0.0",
     "prisma": "^4.5.0",
-    "winston": "3.8.2"
+    "winston": "3.8.2",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/config": "^3.3.0",

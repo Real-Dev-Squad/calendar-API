@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import prisma from "../prisma/prisma";
 import { Users } from "@prisma/client";
 
 /**
@@ -36,4 +37,44 @@ const getSelfData = (
   }
 };
 
-export { getSelfData };
+const patchSelfData = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
+  try {
+    const { userData } = req;
+    const userId = userData?.id;
+    const onboardingUserData: any = userData?.onboarding;
+    const { firstname, lastname, bio, username, onboarding } = req.body;
+    const { isOnboarded } = onboarding ?? {};
+
+    // Allowed fields to edit from patch call
+    const data = {
+      firstname,
+      lastname,
+      bio,
+      username,
+      onboarding: {
+        isOnboarded:
+          isOnboarded !== undefined
+            ? isOnboarded
+            : onboardingUserData.isOnboarded,
+      },
+    };
+
+    await prisma.users.update({
+      where: {
+        id: userId,
+      },
+      data,
+    });
+
+    logger.error("User data updated");
+    return res.status(200).send({ message: "User data updated" });
+  } catch (err) {
+    logger.error("Error while updating user", { err });
+    return res.boom.badImplementation("An internal server error occurred");
+  }
+};
+
+export { getSelfData, patchSelfData };
