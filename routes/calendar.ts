@@ -6,6 +6,7 @@ const router = Router();
 const oauth2Client = new google.auth.OAuth2(
   process.env.GCAL_CLIENT_ID,
   process.env.GCAL_CLIENT_SECRET,
+  // eslint-disable-next-line
   `${process.env.BASE_URL}/api/v1/calendar/google/callback`
 );
 
@@ -42,6 +43,7 @@ const googleCallbackHandler = async (
 
 router.get("/google/connect", googleConnectHandler);
 
+// eslint-disable-next-line
 router.get("/google/callback", googleCallbackHandler);
 
 export default router;

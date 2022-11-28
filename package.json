@@ -10,7 +10,7 @@
     "build": "npx tsc",
     "prestart": "npm run build",
     "start": "node dist/server.js",
-    "dev": "NODE_ENV=development tsc-watch --onSuccess \"node ./dist/server.js\"",
+    "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
     "prisma-format": "npx prisma format"
   },
   "dependencies": {
@@ -22,6 +22,7 @@
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
     "express-boom": "^3.0.0",
+    "googleapis": "^109.0.1",
     "helmet": "^6.0.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^8.5.1",
