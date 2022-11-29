@@ -22,6 +22,7 @@ const getSelfData = (
         firstname: fullUserDataAll.firstname,
         lastname: fullUserDataAll.lastname,
         bio: fullUserDataAll.bio,
+        timezone: fullUserDataAll.timezone,
         onboarding: fullUserDataAll.onboarding,
         emailVerified: fullUserDataAll.emailVerified,
       };

@@ -21,6 +21,7 @@ model Users {
   firstname          String?
   lastname           String?
   bio                String?
+  timezone           String?
   googleProfileId    String?
   microsoftProfileId String?
   emailVerified      Boolean       @default(false)
