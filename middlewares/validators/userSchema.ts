@@ -7,6 +7,7 @@ const patchUserSelfSchema = z.object({
       lastname: z.string().min(2).max(20).optional(),
       bio: z.string().min(2).optional(),
       username: z.string().min(2).max(20).optional(),
+      timezone: z.string().optional(),
       onboarding: z
         .object({
           isOnboarded: z.boolean(),
