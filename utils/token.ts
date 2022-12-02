@@ -1,6 +1,6 @@
 import { AccessToken, Prisma, PrismaClient } from "@prisma/client";
 
-type TokenArgs = Prisma.AccessTokenCreateInput;
+type TokenArgs = Prisma.AccessTokenUncheckedCreateInput;
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,7 @@ const upsertToken = async (data: TokenArgs): Promise<AccessToken | Error> => {
   try {
     const upsertData = await prisma.accessToken.upsert({
       where: {
-        associatedEmail: data.associatedEmail,
+        tokenuuid: data.tokenuuid,
       },
       update: data,
       create: data,

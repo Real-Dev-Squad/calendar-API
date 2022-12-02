@@ -10,8 +10,9 @@
     "build": "npx tsc",
     "prestart": "npm run build",
     "start": "node dist/server.js",
-    "dev": "NODE_ENV=development tsc-watch --onSuccess \"node ./dist/server.js\"",
-    "prisma-format": "npx prisma format"
+    "dev": "cross-env NODE_ENV=development tsc-watch --onSuccess \"node ./dist/server.js\"",
+    "prisma-format": "npx prisma format",
+    "prisma-generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^4.5.0",
@@ -33,6 +34,7 @@
     "winston": "3.8.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "@types/config": "^3.3.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
