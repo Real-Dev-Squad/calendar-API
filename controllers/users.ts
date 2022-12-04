@@ -22,6 +22,7 @@ const getSelfData = (
         firstname: fullUserDataAll.firstname,
         lastname: fullUserDataAll.lastname,
         bio: fullUserDataAll.bio,
+        timezone: fullUserDataAll.timezone,
         onboarding: fullUserDataAll.onboarding,
         emailVerified: fullUserDataAll.emailVerified,
       };
@@ -45,7 +46,8 @@ const patchSelfData = async (
     const { userData } = req;
     const userId = userData?.id;
     const onboardingUserData: any = userData?.onboarding;
-    const { firstname, lastname, bio, username, onboarding } = req.body;
+    const { firstname, lastname, bio, username, onboarding, timezone } =
+      req.body;
     const { isOnboarded } = onboarding ?? {};
 
     // Allowed fields to edit from patch call
@@ -54,6 +56,7 @@ const patchSelfData = async (
       lastname,
       bio,
       username,
+      timezone,
       onboarding: {
         isOnboarded:
           isOnboarded !== undefined
