@@ -26,17 +26,8 @@ const upsertToken = async (data: TokenArgs): Promise<AccessToken | Error> => {
 
     return upsertData;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        logger.error(
-          "Code: P2002. Message: There is a unique constraint violation, a new AccessToken cannot be created with this email"
-        );
-
-        throw new Error("P2002");
-      }
-    }
-
-    throw error;
+    logger.error(error);
+    throw new Error(JSON.stringify(error));
   }
 };
 
