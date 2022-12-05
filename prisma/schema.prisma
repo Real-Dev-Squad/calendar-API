@@ -128,8 +128,8 @@ model AccessToken {
   user            Users        @relation(fields: [userId], references: [id])
   userId          Int
   associatedEmail String
-  tokenuuid       String       @unique
   tokenType       TokenType
+  calendarId      String
   calendarType    CalendarType
   scope           String
   expiry          Int
@@ -138,5 +138,5 @@ model AccessToken {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  @@index([userId])
+  @@unique([userId, calendarType, calendarId], name: "AccessToken_constraint")
 }

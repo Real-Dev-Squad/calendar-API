@@ -14,10 +14,14 @@ const upsertToken = async (data: TokenArgs): Promise<AccessToken | Error> => {
   try {
     const upsertData = await prisma.accessToken.upsert({
       where: {
-        tokenuuid: data.tokenuuid,
+        AccessToken_constraint: {
+          calendarId: data.calendarId,
+          calendarType: data.calendarType,
+          userId: data.userId,
+        },
       },
-      update: data,
       create: data,
+      update: data,
     });
 
     return upsertData;
