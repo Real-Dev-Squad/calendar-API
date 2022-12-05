@@ -16,7 +16,6 @@ const upsertToken = async (data: TokenArgs): Promise<AccessToken | Error> => {
       where: {
         AccessToken_constraint: {
           calendarId: data.calendarId,
-          calendarType: data.calendarType,
           userId: data.userId,
         },
       },

@@ -138,5 +138,5 @@ model AccessToken {
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  @@unique([userId, calendarType, calendarId], name: "AccessToken_constraint")
+  @@unique([userId, calendarId], name: "AccessToken_constraint")
 }
