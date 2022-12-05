@@ -1,6 +1,6 @@
 import { AccessToken, Prisma, PrismaClient } from "@prisma/client";
 
-type TokenArgs = Prisma.AccessTokenCreateInput;
+type TokenArgs = Prisma.AccessTokenUncheckedCreateInput;
 
 const prisma = new PrismaClient();
 
@@ -14,25 +14,19 @@ const upsertToken = async (data: TokenArgs): Promise<AccessToken | Error> => {
   try {
     const upsertData = await prisma.accessToken.upsert({
       where: {
-        associatedEmail: data.associatedEmail,
+        AccessToken_constraint: {
+          calendarId: data.calendarId,
+          userId: data.userId,
+        },
       },
-      update: data,
       create: data,
+      update: data,
     });
 
     return upsertData;
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === "P2002") {
-        logger.error(
-          "Code: P2002. Message: There is a unique constraint violation, a new AccessToken cannot be created with this email"
-        );
-
-        throw new Error("P2002");
-      }
-    }
-
-    throw error;
+    logger.error(error);
+    throw new Error(JSON.stringify(error));
   }
 };
 

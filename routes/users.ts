@@ -1,6 +1,8 @@
 import { Router } from "express";
-import { getSelfData } from "../controllers/users";
+import { getSelfData, patchSelfData } from "../controllers/users";
 import authenticate from "../middlewares/authenticate";
+import { validate } from "../middlewares/validators/validator";
+import { patchUserSelfSchema } from "../middlewares/validators/userSchema";
 
 const router = Router();
 
@@ -9,7 +11,15 @@ const router = Router();
  *  Current Error: "@typescript-eslint/no-misused-promises".
  *  Skiping the check for now as eslint expects a function of return type void for the "authenticate" middleware we are currently returning a Promise
  * */
-// eslint-disable-next-line
+
+/* eslint-disable @typescript-eslint/no-misused-promises */
 router.get("/self", authenticate, getSelfData);
+router.patch(
+  "/self",
+  authenticate,
+  validate(patchUserSelfSchema),
+  patchSelfData
+);
+/* eslint-enables @typescript-eslint/no-misused-promises */
 
 export default router;
