@@ -34,6 +34,7 @@ model Users {
   ParentEvent        ParentEvent[]
   Attendees          Attendees[]
   ChildEvent         ChildEvent[]
+  AccessToken        AccessToken[]
 }
 
 model Calendar {
@@ -112,4 +113,31 @@ model Attendees {
   event      ChildEvent @relation(fields: [eventId], references: [id])
   attendeeId Int
   attendee   Users      @relation(fields: [attendeeId], references: [id])
+}
+
+enum CalendarType {
+  GOOGLECAL
+  OUTLOOKCAL
+}
+
+enum TokenType {
+  BEARER
+}
+
+model AccessToken {
+  id              Int          @id @default(autoincrement())
+  user            Users        @relation(fields: [userId], references: [id])
+  userId          Int
+  associatedEmail String
+  tokenType       TokenType
+  calendarId      String
+  calendarType    CalendarType
+  scope           String
+  expiry          Int
+  accessToken     String
+  refreshToken    String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@unique([userId, calendarId], name: "AccessToken_constraint")
 }
