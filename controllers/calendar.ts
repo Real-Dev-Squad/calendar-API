@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { google } from "googleapis";
 import config from "config";
 
-const gcalClientId = config.get("calendarAccessToken.gcal.clientId");
-const gcalClientSecret = config.get("calendarAccessToken.gcal.clientSecret");
+const gcalClientId = config.get("providers.googleOauth20.clientId");
+const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
 const calApiUrl = config.get("services.calendarApi.baseUrl");
 
 const oauth2Client = new google.auth.OAuth2(
@@ -20,18 +20,15 @@ const googleConnectHandler = (_: Request, res: Response): void => {
     scope: scopes,
   });
 
-  res.redirect(url);
+  return res.redirect(url);
 };
 
-const googleCallbackHandler = async (
-  _: Request,
-  res: Response
-): Promise<void> => {
+const googleCallbackHandler = (_: Request, res: Response): void => {
   const redirectUrl = `${String(
     config.get("services.rCalUi.baseUrl")
   )}/onboarding`;
 
-  res.redirect(redirectUrl);
+  return res.redirect(redirectUrl);
 };
 
 export { googleConnectHandler, googleCallbackHandler };

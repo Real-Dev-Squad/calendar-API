@@ -7,8 +7,6 @@ import {
 const router = Router();
 
 router.get("/google/connect", googleConnectHandler);
-
-// eslint-disable-next-line
 router.get("/google/callback", googleCallbackHandler);
 
 export default router;
