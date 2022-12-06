@@ -23,6 +23,13 @@ module.exports = {
     logLevel: "LOGS_LOG_LEVEL",
   },
 
+  calendarAccessToken: {
+    gcal: {
+      clientId: "GOOGLE_CALENDAR_CLIENTID",
+      clientSecret: "GOOGLE_CALENDAR_CLIENTSECRET",
+    },
+  },
+
   userAccessToken: {
     cookieName: "USER_TOKEN_COOKIE_NAME",
     ttl: {
