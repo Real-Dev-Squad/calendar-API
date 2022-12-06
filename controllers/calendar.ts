@@ -9,7 +9,7 @@ const calApiUrl = config.get("services.calendarApi.baseUrl");
 const oauth2Client = new google.auth.OAuth2(
   String(gcalClientId),
   String(gcalClientSecret),
-  `${calApiUrl}/api/v1/calendar/google/callback`
+  `${String(calApiUrl)}/api/v1/calendar/google/callback`
 );
 
 const scopes = ["https://www.googleapis.com/auth/calendar"];
@@ -27,7 +27,9 @@ const googleCallbackHandler = async (
   _: Request,
   res: Response
 ): Promise<void> => {
-  const redirectUrl = `${config.get("services.rCalUi.baseUrl")}/onboarding`;
+  const redirectUrl = `${String(
+    config.get("services.rCalUi.baseUrl")
+  )}/onboarding`;
 
   res.redirect(redirectUrl);
 };
