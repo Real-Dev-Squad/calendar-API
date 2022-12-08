@@ -21,7 +21,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
-    "express": "~4.16.1",
+    "express": "~4.17.3",
     "express-boom": "^3.0.0",
     "googleapis": "^109.0.1",
     "helmet": "^6.0.0",
