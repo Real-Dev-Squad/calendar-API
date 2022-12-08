@@ -2,6 +2,7 @@ import passport from "passport";
 import { NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
 import * as authService from "../services/authService";
+import { apiResponse, TypedResponse } from "../@types/apiReponse";
 
 /**
  * Fetches the user info from Google and authenticates User
@@ -87,7 +88,10 @@ const microsoftAuthCallback = (
 };
 
 // Logs out the user from the device
-const logOut = (_req: Request, res: Response): Response => {
+const logOut = (
+  _req: Request,
+  res: Response
+): TypedResponse<apiResponse<null>> => {
   const cookieName = config.get("userAccessToken.cookieName");
   const rdsUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
 
@@ -97,10 +101,12 @@ const logOut = (_req: Request, res: Response): Response => {
     secure: true,
     sameSite: "lax",
   });
-
-  return res.json({
+  const response: apiResponse<null> = {
     message: "SignOut successful",
-  });
+    data: null,
+  };
+
+  return res.status(200).json(response);
 };
 
 export { googleAuthCallback, microsoftAuthCallback, logOut };
