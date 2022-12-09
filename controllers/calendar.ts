@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { google } from "googleapis";
 import config from "config";
+import prisma from "../prisma/prisma";
 
 const gcalClientId = config.get("providers.googleOauth20.clientId");
 const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
@@ -31,4 +32,21 @@ const googleCallbackHandler = (_: Request, res: Response): void => {
   return res.redirect(redirectUrl);
 };
 
-export { googleConnectHandler, googleCallbackHandler };
+const getUserCalender = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>>> => {
+  const { username } = req.params;
+
+  const userCalenders = await prisma.calendar.findMany({
+    where: {
+      owner: {
+        username,
+      },
+    },
+  });
+
+  return res.json({ data: userCalenders });
+};
+
+export { googleConnectHandler, googleCallbackHandler, getUserCalender };
