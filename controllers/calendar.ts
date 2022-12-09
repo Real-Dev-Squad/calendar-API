@@ -35,18 +35,23 @@ const googleCallbackHandler = (_: Request, res: Response): void => {
 const getUserCalender = async (
   req: Request,
   res: Response
-): Promise<Response<any, Record<string, any>>> => {
-  const { username } = req.params;
+): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
+  try {
+    const { username } = req.params;
 
-  const userCalenders = await prisma.calendar.findMany({
-    where: {
-      owner: {
-        username,
+    const userCalenders = await prisma.calendar.findMany({
+      where: {
+        owner: {
+          username,
+        },
       },
-    },
-  });
+    });
 
-  return res.json({ data: userCalenders });
+    return res.json({ data: userCalenders });
+  } catch (err) {
+    logger.error("Error while fetching user calender data", { err });
+    return res.boom.badImplementation("An internal server error occurred");
+  }
 };
 
 export { googleConnectHandler, googleCallbackHandler, getUserCalender };
