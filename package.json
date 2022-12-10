@@ -7,7 +7,7 @@
     "lint": "eslint . && echo '✔  Your .js files look good.'",
     "lint-fix": "eslint . --fix",
     "test": "npm run lint && npm run test-unit && npm run test-integration",
-    "test-integration": "cross-env NODE_ENV=test nyc mocha test/integration/**",
+    "test-integration": "cross-env NODE_ENV=test nyc mocha --require ts-node/register test/integration/**",
     "test-unit": "cross-env NODE_ENV=test nyc mocha test/unit/**",
     "build": "npx tsc",
     "prestart": "npm run build",
@@ -38,6 +38,8 @@
     "zod": "^3.19.1"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.4",
+    "@types/chai-http": "^4.2.0",
     "@types/config": "^3.3.0",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
@@ -45,6 +47,7 @@
     "@types/express-boom": "^3.0.1",
     "@types/http-errors": "^1.8.2",
     "@types/jsonwebtoken": "^8.5.9",
+    "@types/mocha": "^10.0.1",
     "@types/morgan": "^1.9.3",
     "@types/node": "^18.11.3",
     "@types/passport": "^1.0.11",
