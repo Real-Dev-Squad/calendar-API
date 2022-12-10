@@ -62,7 +62,7 @@ model ParentEvent {
   ownerId        Int
   owner          Users?           @relation(fields: [ownerId], references: [id])
   eventTypeId    Int
-  eventType      EventType?       @relation(fields: [eventTypeId], references: [id])
+  EventType      EventType?       @relation(fields: [eventTypeId], references: [id])
   isDeleted      Boolean          @default(false)
   ChildEvent     ChildEvent[]
   RecurringEvent RecurringEvent[]
