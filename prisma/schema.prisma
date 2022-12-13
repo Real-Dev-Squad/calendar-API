@@ -43,7 +43,6 @@ model Calendar {
   ownerId    Int
   owner      Users?  @relation(fields: [ownerId], references: [id])
   isPrimary  Boolean @default(false)
-  isSelected Boolean @default(false)
   isDeleted  Boolean @default(false)
 }
 

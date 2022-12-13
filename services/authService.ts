@@ -76,7 +76,6 @@ const loginOrSignupWithGoogle = async (
           name: createdUser.email,
           ownerId: createdUser.id,
           isPrimary: true,
-          isSelected: true,
         },
       });
 
@@ -128,7 +127,6 @@ const loginOrSignupWithMicrosoft = async (
           name: createdUser.email,
           ownerId: createdUser.id,
           isPrimary: true,
-          isSelected: true,
         },
       });
 
