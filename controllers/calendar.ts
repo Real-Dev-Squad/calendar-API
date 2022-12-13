@@ -43,9 +43,7 @@ const getUserCalendar = async (
     if (req.userData?.username === username) {
       const userCalendars: CalendarResponse[] = await prisma.calendar.findMany({
         where: {
-          owner: {
-            username,
-          },
+          ownerId: req.userData.id,
         },
       });
 
@@ -56,10 +54,10 @@ const getUserCalendar = async (
       "User does have permission to get calender, as req.userData.username !== req.params.username"
     );
 
-    return res.boom.forbidden("User doesn't have permisson to get calendar");
+    return res.boom.forbidden("You doesn't have permisson to get calendar");
   } catch (err) {
     logger.error("Error while fetching user calendar data", { err });
-    return res.boom.badImplementation("An internal server error occurred");
+    return res.boom.badImplementation();
   }
 };
 
