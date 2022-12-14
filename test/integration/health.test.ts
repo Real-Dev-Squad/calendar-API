@@ -1,9 +1,9 @@
-import chai from "chai"
-const { expect } = chai;
-import chaiHttp from "chai-http"
-chai.use(chaiHttp);
+import chai from "chai";
+import chaiHttp from "chai-http";
 
-import app from "../../server"
+import app from "../../server";
+const { expect } = chai;
+chai.use(chaiHttp);
 
 describe("GET /health", function () {
   it("should return appropriate response from the healthcheck API", function (done) {

@@ -1,9 +1,9 @@
-import chai from "chai"
-const { expect } = chai;
-import chaiHttp from "chai-http"
-chai.use(chaiHttp);
+import chai from "chai";
+import chaiHttp from "chai-http";
 
-import app from "../../server"
+import app from "../../server";
+const { expect } = chai;
+chai.use(chaiHttp);
 
 describe("GET /auth", function () {
   it("should redirect to google login", function (done) {
@@ -16,8 +16,8 @@ describe("GET /auth", function () {
         }
 
         expect(res).to.have.status(200);
-        expect(res.redirects).to.be.an('array')
-        expect(res.redirects).to.have.lengthOf.at.least(1)
+        expect(res.redirects).to.be.an("array");
+        expect(res.redirects).to.have.lengthOf.at.least(1);
 
         return done();
       });
