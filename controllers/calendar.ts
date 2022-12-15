@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { google } from "googleapis";
 import config from "config";
+import prisma from "../prisma/prisma";
+import { CalendarResponse } from "../@types/apiReponse";
 
 const gcalClientId = config.get("providers.googleOauth20.clientId");
 const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
@@ -31,4 +33,32 @@ const googleCallbackHandler = (_: Request, res: Response): void => {
   return res.redirect(redirectUrl);
 };
 
-export { googleConnectHandler, googleCallbackHandler };
+const getUserCalendar = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
+  try {
+    const { username } = req.params;
+
+    if (req.userData?.username === username) {
+      const userCalendars: CalendarResponse[] = await prisma.calendar.findMany({
+        where: {
+          ownerId: req.userData.id,
+        },
+      });
+
+      return res.json({ data: userCalendars });
+    }
+
+    logger.error(
+      "User does have permission to get calender, as req.userData.username !== req.params.username"
+    );
+
+    return res.boom.forbidden("You doesn't have permisson to get calendar");
+  } catch (err) {
+    logger.error("Error while fetching user calendar data", { err });
+    return res.boom.badImplementation();
+  }
+};
+
+export { googleConnectHandler, googleCallbackHandler, getUserCalendar };

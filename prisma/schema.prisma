@@ -38,11 +38,12 @@ model Users {
 }
 
 model Calendar {
-  id        Int     @id @default(autoincrement())
-  name      String
-  ownerId   Int
-  owner     Users?  @relation(fields: [ownerId], references: [id])
-  isDeleted Boolean @default(false)
+  id         Int     @id @default(autoincrement())
+  name       String
+  ownerId    Int
+  owner      Users?  @relation(fields: [ownerId], references: [id])
+  isPrimary  Boolean @default(false)
+  isDeleted  Boolean @default(false)
 }
 
 model EventType {

@@ -5,4 +5,11 @@ interface healthResponse {
   uptime: number;
 }
 
-export { healthResponse };
+interface CalendarResponse {
+  id: number;
+  name: string;
+  ownerId: number;
+  isDeleted: boolean;
+}
+
+export { healthResponse, CalendarResponse };
