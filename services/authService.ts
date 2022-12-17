@@ -69,6 +69,16 @@ const loginOrSignupWithGoogle = async (
         },
       });
 
+      logger.info(`Creating users default calender.`);
+
+      await prisma.calendar.create({
+        data: {
+          name: createdUser.email,
+          ownerId: createdUser.id,
+          isPrimary: true,
+        },
+      });
+
       return createdUser;
     }
   } catch (err) {
@@ -107,6 +117,16 @@ const loginOrSignupWithMicrosoft = async (
           lastname: microsoftProfile?.surname,
           emailVerified: true,
           microsoftProfileId: microsoftProfile?.id,
+        },
+      });
+
+      logger.info(`Creating users default calender.`);
+
+      await prisma.calendar.create({
+        data: {
+          name: createdUser.email,
+          ownerId: createdUser.id,
+          isPrimary: true,
         },
       });
 
