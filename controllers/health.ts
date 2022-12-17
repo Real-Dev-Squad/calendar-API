@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { healthResponse } from "../@types/apiReponse";
+import { healthResponse } from "../@types/apiReponse.js";
 import { version } from "../package.json";
 
 /**

@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   googleConnectHandler,
   googleCallbackHandler,
-} from "../controllers/calendar";
+} from "../controllers/calendar.js";
 
 const router = Router();
 

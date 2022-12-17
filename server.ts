@@ -1,7 +1,7 @@
 import config from "config";
-import logger from "./utils/logger";
+import logger from "./utils/logger.js";
 import * as http from "http";
-import app from "./app";
+import app from "./app.js";
 import ErrnoException = NodeJS.ErrnoException;
 
 // Initialise globals

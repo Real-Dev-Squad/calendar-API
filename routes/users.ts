@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getSelfData, patchSelfData } from "../controllers/users";
-import authenticate from "../middlewares/authenticate";
-import { validate } from "../middlewares/validators/validator";
-import { patchUserSelfSchema } from "../middlewares/validators/userSchema";
+import { getSelfData, patchSelfData } from "../controllers/users.js";
+import authenticate from "../middlewares/authenticate.js";
+import { validate } from "../middlewares/validators/validator.js";
+import { patchUserSelfSchema } from "../middlewares/validators/userSchema.js";
 
 const router = Router();
 
