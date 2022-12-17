@@ -33,7 +33,6 @@ model Users {
   EventType          EventType[]
   ParentEvent        ParentEvent[]
   Attendees          Attendees[]
-  ChildEvent         ChildEvent[]
   AccessToken        AccessToken[]
 }
 
@@ -81,8 +80,6 @@ model ChildEvent {
   parentEvent   ParentEvent @relation(fields: [parentEventID], references: [id])
   isDeleted     Boolean     @default(false)
   Attendees     Attendees[]
-  Users         Users?      @relation(fields: [usersId], references: [id])
-  usersId       Int?
   EventType     EventType?  @relation(fields: [eventTypeId], references: [id])
   eventTypeId   Int?
 }

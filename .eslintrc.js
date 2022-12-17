@@ -13,7 +13,14 @@ module.exports = {
     "prettier",
   ],
   plugins: ["mocha", "security", "prettier"],
-  overrides: [],
+  overrides: [
+    {
+      files: ["test/**/*.test.ts"],
+      rules: {
+        "@typescript-eslint/no-floating-promises": "off",
+      },
+    },
+  ],
   globals: {
     config: "readonly", // Add globals as 'readonly' or 'writable' as applicable
     logger: "readonly",
