@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
-import AppMiddlewares from "./middlewares";
-import indexRouter from "./routes/index";
-import health from "./controllers/health";
+import AppMiddlewares from "./middlewares/index.js";
+import indexRouter from "./routes/index.js";
+import health from "./controllers/health.js";
 
 // Initialise express
 const app = express();

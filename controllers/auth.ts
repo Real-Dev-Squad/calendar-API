@@ -1,7 +1,7 @@
 import passport from "passport";
 import { NextFunction, Request, Response } from "express";
-import logger from "../utils/logger";
-import * as authService from "../services/authService";
+import logger from "../utils/logger.js";
+import * as authService from "../services/authService.js";
 
 /**
  * Fetches the user info from Google and authenticates User

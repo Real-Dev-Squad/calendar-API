@@ -3,8 +3,8 @@ import {
   googleConnectHandler,
   googleCallbackHandler,
   getUserCalendar,
-} from "../controllers/calendar";
-import authenticate from "../middlewares/authenticate";
+} from "../controllers/calendar.js";
+import authenticate from "../middlewares/authenticate.js";
 
 const router = Router();
 

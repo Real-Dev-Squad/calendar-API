@@ -3,7 +3,7 @@ import {
   googleAuthCallback,
   microsoftAuthCallback,
   logOut,
-} from "../controllers/auth";
+} from "../controllers/auth.js";
 import passport from "passport";
 
 const router = Router();

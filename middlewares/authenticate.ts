@@ -1,5 +1,5 @@
-import * as authService from "../services/authService";
-import prisma from "../prisma/prisma";
+import * as authService from "../services/authService.js";
+import prisma from "../prisma/prisma.js";
 import { NextFunction, Request, Response } from "express";
 
 /**

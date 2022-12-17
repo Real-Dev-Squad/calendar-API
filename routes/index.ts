@@ -1,8 +1,8 @@
 import express from "express";
-import health from "./health";
-import auth from "./auth";
-import users from "./users";
-import calendar from "./calendar";
+import health from "./health.js";
+import auth from "./auth.js";
+import users from "./users.js";
+import calendar from "./calendar.js";
 
 const app = express();
 

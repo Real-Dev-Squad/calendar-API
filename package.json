@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "main": "dist/server.js",
+  "type": "module",
   "scripts": {
     "lint": "eslint . && echo '✔  Your .js files look good.'",
     "lint-fix": "eslint . --fix",

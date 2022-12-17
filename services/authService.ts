@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { GoogleOAuthJson, MicrosoftOAuthJson } from "../@types/providers";
-import prisma from "../prisma/prisma";
-import { jwtPayload } from "../@types/services";
+import { GoogleOAuthJson, MicrosoftOAuthJson } from "../@types/providers.js";
+import prisma from "../prisma/prisma.js";
+import { jwtPayload } from "../@types/services.js";
 import { Users } from "@prisma/client";
 
 /**
