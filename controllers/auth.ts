@@ -1,8 +1,9 @@
 import passport from "passport";
+import Boom from "@hapi/boom";
 import { NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
 import * as authService from "../services/authService";
-import { apiResponse, TypedResponse } from "../@types/apiReponse";
+import { apiResponse } from "../@types/apiReponse";
 
 /**
  * Fetches the user info from Google and authenticates User
@@ -22,7 +23,7 @@ const googleAuthCallback = (
     return passport.authenticate("google", {}, async (err, _, user) => {
       if (err) {
         logger.error(err);
-        return res.boom.unauthorized("User cannot be authenticated");
+        return res.boom(Boom.unauthorized("User cannot be authenticated"));
       }
 
       const userData = await authService.loginOrSignupWithGoogle(user._json);
@@ -61,7 +62,7 @@ const microsoftAuthCallback = (
     return passport.authenticate("microsoft", {}, async (err, _, user) => {
       if (err) {
         logger.error(err);
-        return res.boom.unauthorized("User cannot be authenticated");
+        return res.boom(Boom.unauthorized("User cannot be authenticated"));
       }
       const userData = await authService.loginOrSignupWithMicrosoft(user._json);
       const token = authService.generateAuthToken({ userId: userData?.id });
@@ -91,7 +92,7 @@ const microsoftAuthCallback = (
 const logOut = (
   _req: Request,
   res: Response
-): TypedResponse<apiResponse<null>> => {
+): Response => {
   const cookieName = config.get("userAccessToken.cookieName");
   const rdsUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
 

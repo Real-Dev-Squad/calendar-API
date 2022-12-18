@@ -1,4 +1,5 @@
 import * as authService from "../services/authService";
+import Boom from "@hapi/boom";
 import prisma from "../prisma/prisma";
 import { NextFunction, Request, Response } from "express";
 
@@ -19,7 +20,7 @@ const authenticate = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<any | Express.BoomError<null>> => {
+): Promise<any | Response> => {
   // @Todo: Need to fix this return type "any"
   try {
     let token = req.cookies[config.get("userAccessToken.cookieName")];
@@ -76,11 +77,11 @@ const authenticate = async (
         logger.error("User cannot be authenticated as refreshTtl has passed.", {
           userId,
         });
-        return res.boom.unauthorized("Unauthenticated User");
+        return res.boom(Boom.unauthorized("Unauthenticated User"));
       }
     } else {
       logger.error("User cannot be authenticated.", { err });
-      return res.boom.unauthorized("Unauthenticated User");
+      return res.boom(Boom.unauthorized("Unauthenticated User"));
     }
   }
 };

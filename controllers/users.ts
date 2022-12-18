@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import Boom from "@hapi/boom";
 import prisma from "../prisma/prisma";
 import { Users } from "@prisma/client";
-import { apiResponse, TypedResponse } from "../@types/apiReponse";
+import { apiResponse } from "../@types/apiReponse";
 
 /**
  * Route used to get the health status of the server
@@ -12,7 +13,7 @@ import { apiResponse, TypedResponse } from "../@types/apiReponse";
 const getSelfData = (
   req: Request,
   res: Response
-): TypedResponse<apiResponse<Partial<Users>>> | Express.BoomError<null> => {
+): Response => {
   try {
     if (req.userData) {
       const fullUserDataAll: Users = req.userData;
@@ -35,17 +36,17 @@ const getSelfData = (
     }
 
     logger.info("User does not exist, as req.userData is empty");
-    return res.boom.notFound("User doesn't exist");
+    return res.boom(Boom.notFound("User doesn't exist"));
   } catch (err) {
     logger.error("Error while fetching user", { err });
-    return res.boom.badImplementation("An internal server error occurred");
+    return res.boom(Boom.badImplementation("An internal server error occurred"));
   }
 };
 
 const patchSelfData = async (
   req: Request,
   res: Response
-): Promise<TypedResponse<apiResponse<null>> | Express.BoomError<null>> => {
+): Promise<Response> => {
   try {
     const { userData } = req;
     const userId = userData?.id;
@@ -84,7 +85,7 @@ const patchSelfData = async (
     return res.status(200).json(response);
   } catch (err) {
     logger.error("Error while updating user", { err });
-    return res.boom.badImplementation("An internal server error occurred");
+    return res.boom(Boom.badImplementation("An internal server error occurred"));
   }
 };
 

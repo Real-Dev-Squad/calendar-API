@@ -1,5 +1,4 @@
 import { Users } from "@prisma/client";
-import Boom from "express-boom";
 
 declare global {
   namespace Express {
@@ -8,7 +7,7 @@ declare global {
     }
 
     interface Response {
-      boom?: Boom;
+      boom?: any;
     }
   }
 }
