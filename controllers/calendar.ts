@@ -55,7 +55,9 @@ const getUserCalendar = async (
       "User does have permission to get calender, as req.userData.username !== req.params.username"
     );
 
-    return res.boom(Boom.forbidden("You doesn't have permisson to get calendar"));
+    return res.boom(
+      Boom.forbidden("You doesn't have permisson to get calendar")
+    );
   } catch (err) {
     logger.error("Error while fetching user calendar data", { err });
     return res.boom(Boom.badImplementation());
