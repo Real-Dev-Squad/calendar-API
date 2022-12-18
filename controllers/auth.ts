@@ -89,10 +89,7 @@ const microsoftAuthCallback = (
 };
 
 // Logs out the user from the device
-const logOut = (
-  _req: Request,
-  res: Response
-): Response => {
+const logOut = (_req: Request, res: Response): Response => {
   const cookieName = config.get("userAccessToken.cookieName");
   const rdsUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
 
@@ -104,7 +101,6 @@ const logOut = (
   });
   const response: apiResponse<null> = {
     message: "SignOut successful",
-    data: null,
   };
 
   return res.status(200).json(response);

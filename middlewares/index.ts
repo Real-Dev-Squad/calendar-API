@@ -8,7 +8,7 @@ import * as dotenv from "dotenv";
 import morganMiddleware from "../utils/httpLogger";
 import "../providers/google";
 import "../providers/microsoft";
-import errorResponse from './errorResponse'
+import errorResponse from "./errorResponse";
 
 const middleware = (app: express.Application): void => {
   // Load vars from .env to process.env

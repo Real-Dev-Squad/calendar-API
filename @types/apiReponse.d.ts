@@ -1,6 +1,6 @@
 // Define the interfaces to be used for the API responses
 
-import { Payload } from '@hapi/boom'
+import { Payload } from "@hapi/boom";
 
 interface healthResponse {
   version: string;

@@ -10,10 +10,7 @@ import { apiResponse } from "../@types/apiReponse";
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
  */
-const getSelfData = (
-  req: Request,
-  res: Response
-): Response => {
+const getSelfData = (req: Request, res: Response): Response => {
   try {
     if (req.userData) {
       const fullUserDataAll: Users = req.userData;
@@ -28,18 +25,21 @@ const getSelfData = (
         onboarding: fullUserDataAll.onboarding,
         emailVerified: fullUserDataAll.emailVerified,
       };
+
       const response: apiResponse<typeof userData> = {
-        message: "",
         data: userData,
       };
-      return res.status(200).json(response);
+
+      return res.json(response);
     }
 
     logger.info("User does not exist, as req.userData is empty");
     return res.boom(Boom.notFound("User doesn't exist"));
   } catch (err) {
     logger.error("Error while fetching user", { err });
-    return res.boom(Boom.badImplementation("An internal server error occurred"));
+    return res.boom(
+      Boom.badImplementation("An internal server error occurred")
+    );
   }
 };
 
@@ -78,14 +78,17 @@ const patchSelfData = async (
     });
 
     logger.info("User data updated");
+
     const response: apiResponse<null> = {
       message: "User data updated",
-      data: null,
     };
-    return res.status(200).json(response);
+
+    return res.json(response);
   } catch (err) {
     logger.error("Error while updating user", { err });
-    return res.boom(Boom.badImplementation("An internal server error occurred"));
+    return res.boom(
+      Boom.badImplementation("An internal server error occurred")
+    );
   }
 };
 

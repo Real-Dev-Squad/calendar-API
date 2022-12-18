@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from 'express'
-import { Payload } from '@hapi/boom'
-import { apiResponse } from '../@types/apiReponse'
+import { NextFunction, Request, Response } from "express";
+import { Payload } from "@hapi/boom";
+import { apiResponse } from "../@types/apiReponse";
 
 /**
  * Creates the error response and sends in the apiResponse format
@@ -8,33 +8,37 @@ import { apiResponse } from '../@types/apiReponse'
  * @param {Object} res
  * @param {Function} next
  */
-const createErrorResponse = (_req: Request, res: Response, next: NextFunction) => {
+const createErrorResponse = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): Response | any => {
   res.boom = (boomError: any): Response => {
-    let boomResponse: Payload
+    let boomResponse: Payload;
 
     if (boomError.isBoom) {
       // converting boom response to required status type
       boomResponse = {
         ...boomError.output.payload,
-        ...boomError.data
-      }
+        ...boomError.data,
+      };
     } else {
       // input boomResponse is simple string or any different object, sending 400
       boomResponse = {
         statusCode: 500,
         error: boomError,
-        message: 'Internal Server Error'
-      }
+        message: "Internal Server Error",
+      };
     }
 
     // Construct the response object
     const response: apiResponse<any> = {
-      error: boomResponse
-    }
+      error: boomResponse,
+    };
 
-    return res.status(boomResponse.statusCode).send(response)
-  }
-  return next()
-}
+    return res.status(boomResponse.statusCode).send(response);
+  };
+  return next();
+};
 
-export default createErrorResponse
+export default createErrorResponse;
