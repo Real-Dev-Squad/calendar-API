@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
+import Boom from "@hapi/boom";
 import prisma from "../prisma/prisma";
 import { Users } from "@prisma/client";
+import { apiResponse } from "../@types/apiReponse";
 
 /**
  * Route used to get the health status of the server
@@ -8,10 +10,7 @@ import { Users } from "@prisma/client";
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
  */
-const getSelfData = (
-  req: Request,
-  res: Response
-): Response<any, Record<string, any>> | Express.BoomError<null> => {
+const getSelfData = (req: Request, res: Response): Response => {
   try {
     if (req.userData) {
       const fullUserDataAll: Users = req.userData;
@@ -27,21 +26,27 @@ const getSelfData = (
         emailVerified: fullUserDataAll.emailVerified,
       };
 
-      return res.json(userData);
+      const response: apiResponse<typeof userData> = {
+        data: userData,
+      };
+
+      return res.json(response);
     }
 
     logger.info("User does not exist, as req.userData is empty");
-    return res.boom.notFound("User doesn't exist");
+    return res.boom(Boom.notFound("User doesn't exist"));
   } catch (err) {
     logger.error("Error while fetching user", { err });
-    return res.boom.badImplementation("An internal server error occurred");
+    return res.boom(
+      Boom.badImplementation("An internal server error occurred")
+    );
   }
 };
 
 const patchSelfData = async (
   req: Request,
   res: Response
-): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
+): Promise<Response> => {
   try {
     const { userData } = req;
     const userId = userData?.id;
@@ -72,11 +77,18 @@ const patchSelfData = async (
       data,
     });
 
-    logger.error("User data updated");
-    return res.status(200).send({ message: "User data updated" });
+    logger.info("User data updated");
+
+    const response: apiResponse<null> = {
+      message: "User data updated",
+    };
+
+    return res.json(response);
   } catch (err) {
     logger.error("Error while updating user", { err });
-    return res.boom.badImplementation("An internal server error occurred");
+    return res.boom(
+      Boom.badImplementation("An internal server error occurred")
+    );
   }
 };
 

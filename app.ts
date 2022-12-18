@@ -3,6 +3,7 @@ import createError from "http-errors";
 import AppMiddlewares from "./middlewares";
 import indexRouter from "./routes/index";
 import health from "./controllers/health";
+import Boom from "@hapi/boom";
 
 // Initialise express
 const app = express();
@@ -29,10 +30,12 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
 
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const statusCode: number = err.status || 500;
-  return res.boom.boomify(err, {
-    statusCode,
-    message: err.message,
-  });
+  return res.boom(
+    Boom.boomify(err, {
+      statusCode,
+      message: err.message,
+    })
+  );
 });
 
 export default app;

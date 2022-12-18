@@ -16,9 +16,9 @@ describe("GET /health", function () {
         }
 
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an("object");
-        expect(res.body).to.have.property("uptime").that.is.a("number");
-        expect(res.body).to.have.property("version").that.is.a("string");
+        expect(res.body.data).to.be.an("object");
+        expect(res.body.data).to.have.property("uptime").that.is.a("number");
+        expect(res.body.data).to.have.property("version").that.is.a("string");
 
         return done();
       });
@@ -34,9 +34,9 @@ describe("GET /health", function () {
         }
 
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an("object");
-        expect(res.body).to.have.property("uptime").that.is.a("number");
-        expect(res.body).to.have.property("version").that.is.a("string");
+        expect(res.body.data).to.be.an("object");
+        expect(res.body.data).to.have.property("uptime").that.is.a("number");
+        expect(res.body.data).to.have.property("version").that.is.a("string");
 
         return done();
       });

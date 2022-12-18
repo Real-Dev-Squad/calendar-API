@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import Boom from "@hapi/boom";
 import { google } from "googleapis";
 import config from "config";
 import prisma from "../prisma/prisma";
@@ -36,7 +37,7 @@ const googleCallbackHandler = (_: Request, res: Response): void => {
 const getUserCalendar = async (
   req: Request,
   res: Response
-): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
+): Promise<Response<any, Record<string, any>>> => {
   try {
     const { username } = req.params;
 
@@ -54,10 +55,12 @@ const getUserCalendar = async (
       "User does have permission to get calender, as req.userData.username !== req.params.username"
     );
 
-    return res.boom.forbidden("You doesn't have permisson to get calendar");
+    return res.boom(
+      Boom.forbidden("You doesn't have permisson to get calendar")
+    );
   } catch (err) {
     logger.error("Error while fetching user calendar data", { err });
-    return res.boom.badImplementation();
+    return res.boom(Boom.badImplementation());
   }
 };
 

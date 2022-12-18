@@ -1,7 +1,9 @@
 import passport from "passport";
+import Boom from "@hapi/boom";
 import { NextFunction, Request, Response } from "express";
 import logger from "../utils/logger";
 import * as authService from "../services/authService";
+import { apiResponse } from "../@types/apiReponse";
 
 /**
  * Fetches the user info from Google and authenticates User
@@ -21,7 +23,7 @@ const googleAuthCallback = (
     return passport.authenticate("google", {}, async (err, _, user) => {
       if (err) {
         logger.error(err);
-        return res.boom.unauthorized("User cannot be authenticated");
+        return res.boom(Boom.unauthorized("User cannot be authenticated"));
       }
 
       const userData = await authService.loginOrSignupWithGoogle(user._json);
@@ -60,7 +62,7 @@ const microsoftAuthCallback = (
     return passport.authenticate("microsoft", {}, async (err, _, user) => {
       if (err) {
         logger.error(err);
-        return res.boom.unauthorized("User cannot be authenticated");
+        return res.boom(Boom.unauthorized("User cannot be authenticated"));
       }
       const userData = await authService.loginOrSignupWithMicrosoft(user._json);
       const token = authService.generateAuthToken({ userId: userData?.id });
@@ -97,10 +99,11 @@ const logOut = (_req: Request, res: Response): Response => {
     secure: true,
     sameSite: "lax",
   });
-
-  return res.json({
+  const response: apiResponse<null> = {
     message: "SignOut successful",
-  });
+  };
+
+  return res.status(200).json(response);
 };
 
 export { googleAuthCallback, microsoftAuthCallback, logOut };
