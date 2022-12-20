@@ -1,10 +1,23 @@
-import { ChildEvent, EventType, ParentEvent } from "@prisma/client";
+import {
+  ChildEvent,
+  EventType,
+  ParentEvent,
+  RecurringEvent,
+} from "@prisma/client";
 import { Request, Response } from "express";
+import Boom from "@hapi/boom";
 import { RECURRING_FREQUENCY } from "../constants/recurringFrequency";
 import prisma from "../prisma/prisma";
+import {
+  createParentEvent,
+  createChildEvent,
+  createRecurringEvent,
+  createManyChildEvent,
+  createAttendeesForEvent,
+} from "../services/eventsService";
 
 /**
- * Route used to get the health status of the server
+ * Route used to post event
  *
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
@@ -12,16 +25,12 @@ import prisma from "../prisma/prisma";
 const postEvent = async (
   req: Request,
   res: Response
-): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
+): Promise<Response<any, Record<string, any>>> => {
   try {
     const userId = req.userData.id;
     const eventData = req.body;
-
-    // TODO: MOVE TO SERVICE
     const attendeesData = eventData.attendees;
     const recurringData = eventData.recurring;
-
-    // Create parent event
 
     // GET EVENT ID
     const eventTypeData: EventType = await prisma.eventType.findFirstOrThrow({
@@ -30,113 +39,81 @@ const postEvent = async (
       },
     });
 
-    // If null throw error
+    const parentEventData: ParentEvent | any = {
+      name: eventData.name,
+      description: eventData.description,
+      ownerId: userId,
+      eventTypeId: eventTypeData.id,
+    };
 
-    const parentEvent: ParentEvent = await prisma.parentEvent.create({
-      data: {
-        name: eventData.name,
-        description: eventData.description,
-        ownerId: userId,
-        eventTypeId: eventTypeData.id, /// /TODO: fix this using id
-      },
-    });
+    const parentEvent: ParentEvent = await createParentEvent(parentEventData);
 
-    console.log("parent done", parentEvent);
+    const childEventData: ChildEvent | any = {
+      name: eventData.name,
+      description: eventData.description,
+      location: eventData.location,
+      startTime: new Date(eventData.startTime),
+      endTime: new Date(eventData.endTime),
+      parentEventID: parentEvent.id,
+      eventTypeId: eventTypeData.id,
+    };
 
-    // // Create child event
-
-    const chileEvent: ChildEvent = await prisma.childEvent.create({
-      data: {
-        name: eventData.name,
-        description: eventData.description,
-        location: eventData.location,
-        startTime: new Date(), // GET daAT time fomr user
-        endTime: new Date(), // GET DATE time from user
-        parentEventID: parentEvent.id,
-        eventTypeId: eventTypeData.id, // TODO: fix this using id
-      },
-    });
-
-    console.log("chile done", chileEvent);
-
-    console.log(chileEvent);
+    const childEvent = await createChildEvent(childEventData);
 
     // Create RECURRIGN EVENT DATA
     if (recurringData) {
-      const recurringEvent = await prisma.recurringEvent.create({
-        data: {
-          eventId: parentEvent.id,
-          recurringFrequency: recurringData.recurringFrequency,
-          interval: recurringData.interval,
-          count: recurringData.count,
-          daysOfWeek: recurringData.daysOfWeek,
-          weeksOfMonth: recurringData.weeksOfMonth,
-          daysOfMonth: recurringData.daysOfMonth,
-          monthsOfYear: recurringData.monthsOfYear,
-        },
-      });
-      
-      console.log(recurringEvent);
+      const recurringEventData: RecurringEvent | any = {
+        eventId: parentEvent.id,
+        recurringFrequency: recurringData.recurringFrequency,
+        interval: recurringData.interval,
+        count: recurringData.count,
+        daysOfWeek: recurringData.daysOfWeek,
+        weeksOfMonth: recurringData.weeksOfMonth,
+        daysOfMonth: recurringData.daysOfMonth,
+        monthsOfYear: recurringData.monthsOfYear,
+      };
 
+      await createRecurringEvent(recurringEventData);
 
-      // Create childEvents for recurring data
-
-      const data = [];
-      const timesToAdd =
+      const recurringEventFrequency =
         recurringData.count ??
         RECURRING_FREQUENCY[recurringData.recurringFrequency];
-      for (let i = 0; i < timesToAdd; i++) {
-        data.push({
-          name: eventData.name,
-          description: eventData.description,
-          location: eventData.location,
-          // TODO: fix start and end time for recurring events
-          startTime: new Date(), // GET daAT time fomr user
-          endTime: new Date(), // GET DATE time from user
-          parentEventID: parentEvent.id,
-          eventTypeId: eventTypeData.id, // TODO: fix this using id,
-        });
-      }
-      console.log(data);
 
-      // Add data to child event
-      const manyEvents = await prisma.childEvent.createMany({
-        data,
-        skipDuplicates: true,
-      });
-      console.log("many", manyEvents, { manyEvents });
+      await createManyChildEvent(recurringEventFrequency, childEvent);
     }
-    // CREAATE ATTNEDES DATA
 
-    if (attendeesData.length) {
-      const attendeeData = await prisma.users.findMany({
-        where: {
-          email: {
-            in: [...attendeesData],
+    if (attendeesData?.length) {
+      await createAttendeesForEvent(childEvent.id, attendeesData);
+    }
+
+    // TODO: change response accroding to doc
+    const event = await prisma.childEvent.findUnique({
+      where: {
+        id: childEvent.id,
+      },
+      include: {
+        Attendees: {
+          select: {
+            attendee: {
+              select: {
+                email: true,
+              },
+            },
           },
         },
-      });
-      console.log(attendeeData);
-
-      const data = attendeeData.map((attendee) => {
-        return {
-          attendeeId: attendee.id,
-          eventId: parentEvent.id,
-        };
-      });
-
-      console.log(data);
-
-      await prisma.attendees.createMany({ data, skipDuplicates: true });
-    }
+        parentEvent: {
+          select: {
+            RecurringEvent: true,
+          },
+        },
+      },
+    });
 
     logger.info("Event created");
-    return res.status(200).send({ message: "Event created" });
-  } catch (err) {
-    console.log(err);
-
-    logger.error("Error while updating user", { err });
-    return res.boom.badImplementation("An internal server error occurred");
+    return res.status(200).send({ message: "Event created", data: event });
+  } catch (err: any) {
+    logger.error("Error while creating event", { err });
+    return res.boom(Boom.badImplementation());
   }
 };
 

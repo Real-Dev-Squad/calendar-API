@@ -8,15 +8,17 @@ const RECURRING_FREQUENCY = [
   "HOURLY",
 ] as const;
 
+const EVENT_TYPE = ["event"] as const;
+
 const postEventSchema = z.object({
   body: z
     .object({
       name: z.string().min(1),
       description: z.string().optional(),
-      eventType: z.string(),
+      eventType: z.enum(EVENT_TYPE),
       location: z.string().optional(),
-      startTime: z.string(),
-      endTime: z.string(),
+      startTime: z.number(),
+      endTime: z.number(),
       calendarId: z.number(),
       attendees: z.array(z.string()).optional(),
       recurring: z
