@@ -23,7 +23,7 @@ const postEventSchema = z.object({
         .object({
           recurringFrequency: z.enum(RECURRING_FREQUENCY),
           interval: z.number(),
-          count: z.number(),
+          count: z.number().optional(),
           daysOfWeek: z.string().optional(),
           weeksOfMonth: z.string().optional(),
           daysOfMonth: z.string().optional(),
