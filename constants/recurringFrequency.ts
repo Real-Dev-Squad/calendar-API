@@ -1,6 +1,6 @@
 export const RECURRING_FREQUENCY: any = {
-  DAILY: 730,
-  WEEKLY: 104,
-  MONTHLY: 24,
-  YEARLY: 50,
+  DAILY: 730, // Days
+  WEEKLY: 104, // Weeks
+  MONTHLY: 24, // Months
+  YEARLY: 50, // Years
 };
