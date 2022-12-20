@@ -12,10 +12,9 @@ import prisma from "../prisma/prisma";
 const postEvent = async (
   req: Request,
   res: Response
-  // @ts-expect-error
 ): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
   try {
-    const userId = req.userData?.id;
+    const userId = req.userData.id;
     const eventData = req.body;
 
     // TODO: MOVE TO SERVICE
@@ -25,11 +24,13 @@ const postEvent = async (
     // Create parent event
 
     // GET EVENT ID
-    const eventTypeData: EventType = await prisma.eventType.findFirst({
+    const eventTypeData: EventType = await prisma.eventType.findFirstOrThrow({
       where: {
         name: eventData.eventType,
       },
     });
+
+    // If null throw error
 
     const parentEvent: ParentEvent = await prisma.parentEvent.create({
       data: {
