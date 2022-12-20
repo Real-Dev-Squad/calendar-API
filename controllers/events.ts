@@ -1,5 +1,6 @@
-import { ParentEvent, Users } from "@prisma/client";
+import { ChildEvent, EventType, ParentEvent } from "@prisma/client";
 import { Request, Response } from "express";
+import { RECURRING_FREQUENCY } from "../constants/recurringFrequency";
 import prisma from "../prisma/prisma";
 
 /**
@@ -11,40 +12,54 @@ import prisma from "../prisma/prisma";
 const postEvent = async (
   req: Request,
   res: Response
+  // @ts-expect-error
 ): Promise<Response<any, Record<string, any>> | Express.BoomError<null>> => {
   try {
-    const { id: userId }: Users = req.userData;
+    const userId = req.userData?.id;
     const eventData = req.body;
+
     // TODO: MOVE TO SERVICE
-    // const attendeesData = eventData.attendees;
+    const attendeesData = eventData.attendees;
     const recurringData = eventData.recurring;
 
     // Create parent event
+
+    // GET EVENT ID
+    const eventTypeData: EventType = await prisma.eventType.findFirst({
+      where: {
+        name: eventData.eventType,
+      },
+    });
 
     const parentEvent: ParentEvent = await prisma.parentEvent.create({
       data: {
         name: eventData.name,
         description: eventData.description,
         ownerId: userId,
-        EventType: eventData.eventType,
-        eventTypeId: 1, //GET FROM EVENT ID
+        eventTypeId: eventTypeData.id, /// /TODO: fix this using id
       },
     });
 
-    // Create child event
+    console.log("parent done", parentEvent);
 
-    const chileEvent = prisma.childEvent.create({
+    // // Create child event
+
+    const chileEvent: ChildEvent = await prisma.childEvent.create({
       data: {
         name: eventData.name,
         description: eventData.description,
-        usersId: userData?.id,
         location: eventData.location,
-        EventType: eventData.eventType,
+        startTime: new Date(), // GET daAT time fomr user
+        endTime: new Date(), // GET DATE time from user
         parentEventID: parentEvent.id,
+        eventTypeId: eventTypeData.id, // TODO: fix this using id
       },
     });
 
-    console.log(event);
+    console.log("chile done", chileEvent);
+
+    console.log(chileEvent);
+
     // Create RECURRIGN EVENT DATA
     if (recurringData) {
       const recurringEvent = await prisma.recurringEvent.create({
@@ -59,14 +74,63 @@ const postEvent = async (
           monthsOfYear: recurringData.monthsOfYear,
         },
       });
+      
       console.log(recurringEvent);
+
+
+      // Create childEvents for recurring data
+
+      const data = [];
+      const timesToAdd =
+        recurringData.count ??
+        RECURRING_FREQUENCY[recurringData.recurringFrequency];
+      for (let i = 0; i < timesToAdd; i++) {
+        data.push({
+          name: eventData.name,
+          description: eventData.description,
+          location: eventData.location,
+          // TODO: fix start and end time for recurring events
+          startTime: new Date(), // GET daAT time fomr user
+          endTime: new Date(), // GET DATE time from user
+          parentEventID: parentEvent.id,
+          eventTypeId: eventTypeData.id, // TODO: fix this using id,
+        });
+      }
+      console.log(data);
+
+      // Add data to child event
+      const manyEvents = await prisma.childEvent.createMany({
+        data,
+        skipDuplicates: true,
+      });
+      console.log("many", manyEvents, { manyEvents });
     }
     // CREAATE ATTNEDES DATA
 
-    await prisma.attendees.createMany({ data: [], skipDuplicates: true });
+    if (attendeesData.length) {
+      const attendeeData = await prisma.users.findMany({
+        where: {
+          email: {
+            in: [...attendeesData],
+          },
+        },
+      });
+      console.log(attendeeData);
 
-    logger.info("User data updated");
-    return res.status(200).send({ message: "User data updated" });
+      const data = attendeeData.map((attendee) => {
+        return {
+          attendeeId: attendee.id,
+          eventId: parentEvent.id,
+        };
+      });
+
+      console.log(data);
+
+      await prisma.attendees.createMany({ data, skipDuplicates: true });
+    }
+
+    logger.info("Event created");
+    return res.status(200).send({ message: "Event created" });
   } catch (err) {
     console.log(err);
 
