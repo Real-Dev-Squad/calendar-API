@@ -32,7 +32,6 @@ const postEvent = async (
     const attendeesData = eventData.attendees;
     const recurringData = eventData.recurring;
 
-    // GET EVENT ID
     const eventTypeData: EventType = await prisma.eventType.findFirstOrThrow({
       where: {
         name: eventData.eventType,
@@ -60,7 +59,6 @@ const postEvent = async (
 
     const childEvent = await createChildEvent(childEventData);
 
-    // Create RECURRIGN EVENT DATA
     if (recurringData) {
       const recurringEventData: RecurringEvent | any = {
         eventId: parentEvent.id,
