@@ -91,8 +91,6 @@ const postEvent = async (
     logger.info("Event created");
     return res.status(200).send({ message: "Event created", data: event });
   } catch (err: any) {
-    console.log(err);
-    
     logger.error("Error while creating event", { err });
     return res.boom(Boom.badImplementation());
   }
