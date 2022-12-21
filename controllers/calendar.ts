@@ -3,7 +3,7 @@ import Boom from "@hapi/boom";
 import { google } from "googleapis";
 import config from "config";
 import prisma from "../prisma/prisma";
-import { CalendarResponse } from "../@types/apiReponse";
+import { apiResponse, calendarResponse } from "../@types/apiReponse";
 
 const gcalClientId = config.get("providers.googleOauth20.clientId");
 const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
@@ -37,27 +37,36 @@ const googleCallbackHandler = (_: Request, res: Response): void => {
 const getUserCalendar = async (
   req: Request,
   res: Response
-): Promise<Response<any, Record<string, any>>> => {
+): Promise<Response> => {
   try {
     const { username } = req.params;
 
     if (req.userData?.username === username) {
-      const userCalendars: CalendarResponse[] = await prisma.calendar.findMany({
+      const userCalendars: calendarResponse[] = await prisma.calendar.findMany({
         where: {
           ownerId: req.userData.id,
+          isDeleted: false,
+        },
+        select: {
+          id: true,
+          name: true,
+          ownerId: true,
+          isPrimary: true,
         },
       });
 
-      return res.json({ data: userCalendars });
+      const response: apiResponse<calendarResponse[]> = {
+        data: userCalendars,
+      };
+
+      return res.json(response);
     }
 
     logger.error(
       "User does have permission to get calender, as req.userData.username !== req.params.username"
     );
 
-    return res.boom(
-      Boom.forbidden("You doesn't have permisson to get calendar")
-    );
+    return res.boom(Boom.forbidden(config.get("messages.forbidden")));
   } catch (err) {
     logger.error("Error while fetching user calendar data", { err });
     return res.boom(Boom.badImplementation());

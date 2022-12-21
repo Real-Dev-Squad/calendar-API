@@ -128,7 +128,7 @@ model AccessToken {
   calendarId      String
   calendarType    CalendarType
   scope           String
-  expiry          Int
+  expiry          DateTime
   accessToken     String
   refreshToken    String
   createdAt       DateTime     @default(now())

@@ -13,11 +13,11 @@ interface healthResponse {
   uptime: number;
 }
 
-interface CalendarResponse {
+interface calendarResponse {
   id: number;
   name: string;
   ownerId: number;
-  isDeleted: boolean;
+  isPrimary: boolean;
 }
 
 interface usernameAvailabilityResponse {
@@ -28,6 +28,6 @@ interface usernameAvailabilityResponse {
 export {
   healthResponse,
   apiResponse,
-  CalendarResponse,
+  calendarResponse,
   usernameAvailabilityResponse,
 };

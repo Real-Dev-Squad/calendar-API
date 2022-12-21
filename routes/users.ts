@@ -8,7 +8,7 @@ import authenticate from "../middlewares/authenticate";
 import { validate } from "../middlewares/validators/validator";
 import {
   patchUserSelfSchema,
-  usernameAvailabilitySchema,
+  usernameParamSchema,
 } from "../middlewares/validators/userSchema";
 
 const router = Router();
@@ -29,13 +29,11 @@ router.patch(
   patchSelfData
 );
 
-// router.get("/usernameCheck/:username", authenticate, usernameAvailability);
 router.get(
   "/usernameCheck/:username",
   authenticate,
-  validate(usernameAvailabilitySchema),
+  validate(usernameParamSchema),
   usernameAvailability
 );
-/* eslint-enables @typescript-eslint/no-misused-promises */
 
 export default router;
