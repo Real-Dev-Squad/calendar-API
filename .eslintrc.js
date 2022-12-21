@@ -46,5 +46,6 @@ module.exports = {
 
     // @todo: Remove these temporarily allowed rules below once the issues are resolved
     "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
   },
 };

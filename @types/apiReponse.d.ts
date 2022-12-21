@@ -20,10 +20,14 @@ interface CalendarResponse {
   isDeleted: boolean;
 }
 
-
-interface usernameAvailability {
+interface usernameAvailabilityResponse {
   username: string;
   available: boolean;
 }
 
-export { healthResponse, apiResponse, CalendarResponse, usernameAvailability };
+export {
+  healthResponse,
+  apiResponse,
+  CalendarResponse,
+  usernameAvailabilityResponse,
+};
