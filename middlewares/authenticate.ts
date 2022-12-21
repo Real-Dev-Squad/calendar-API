@@ -36,7 +36,7 @@ const authenticate = async (
     const { userId } = authService.verifyAuthToken(token);
 
     // add user data to `req.userData` for further use
-    req.userData = await prisma.users.findUnique({
+    req.userData = await prisma.users.findUniqueOrThrow({
       where: {
         id: userId,
       },
