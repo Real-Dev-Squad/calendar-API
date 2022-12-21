@@ -32,6 +32,7 @@ router.patch(
 // router.get("/usernameCheck/:username", authenticate, usernameAvailability);
 router.get(
   "/usernameCheck/:username",
+  authenticate,
   validate(usernameAvailabilitySchema),
   usernameAvailability
 );
