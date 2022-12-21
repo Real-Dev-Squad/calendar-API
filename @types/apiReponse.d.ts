@@ -2,6 +2,12 @@
 
 import { Payload } from "@hapi/boom";
 
+interface apiResponse<ResponseType> extends ResponseType {
+  message?: string;
+  data?: ResponseType;
+  error?: Payload;
+}
+
 interface healthResponse {
   version: string;
   uptime: number;
@@ -14,10 +20,10 @@ interface CalendarResponse {
   isDeleted: boolean;
 }
 
-interface apiResponse<ResponseType> extends ResponseType {
-  message?: string;
-  data?: ResponseType;
-  error?: Payload;
+
+interface usernameAvailability {
+  username: string;
+  available: boolean;
 }
 
-export { healthResponse, apiResponse, CalendarResponse };
+export { healthResponse, apiResponse, CalendarResponse, usernameAvailability };
