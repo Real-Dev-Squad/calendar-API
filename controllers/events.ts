@@ -96,4 +96,58 @@ const postEvent = async (
   }
 };
 
-export { postEvent };
+/**
+ * Route used to post event
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ */
+const getEvents = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { eventId } = req.params;
+    const { startTime, endTime } = req.query;
+
+    const whereQuery: { [k: string]: any } = {
+      id: Number(eventId),
+    };
+
+    if (startTime) {
+      whereQuery.startTime = {
+        gte: new Date(Number(startTime)),
+      };
+    }
+
+    if (endTime) {
+      whereQuery.endTime = {
+        lte: new Date(Number(endTime)),
+      };
+    }
+
+    const event = await prisma.childEvent.findMany({
+      where: whereQuery,
+      include: {
+        Attendees: {
+          select: {
+            attendee: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+        parentEvent: {
+          include: {
+            RecurringEvent: true,
+          },
+        },
+      },
+    });
+
+    return res.status(200).send({ data: event });
+  } catch (err) {
+    logger.error("Error while getting event", { err });
+    return res.boom(Boom.badImplementation());
+  }
+};
+
+export { postEvent, getEvents };
