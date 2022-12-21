@@ -1,8 +1,15 @@
 import { Router } from "express";
-import { getSelfData, patchSelfData } from "../controllers/users";
+import {
+  getSelfData,
+  patchSelfData,
+  usernameAvailability,
+} from "../controllers/users";
 import authenticate from "../middlewares/authenticate";
 import { validate } from "../middlewares/validators/validator";
-import { patchUserSelfSchema } from "../middlewares/validators/userSchema";
+import {
+  patchUserSelfSchema,
+  usernameAvailabilitySchema,
+} from "../middlewares/validators/userSchema";
 
 const router = Router();
 
@@ -14,11 +21,20 @@ const router = Router();
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 router.get("/self", authenticate, getSelfData);
+
 router.patch(
   "/self",
   authenticate,
   validate(patchUserSelfSchema),
   patchSelfData
+);
+
+// router.get("/usernameCheck/:username", authenticate, usernameAvailability);
+router.get(
+  "/usernameCheck/:username",
+  authenticate,
+  validate(usernameAvailabilitySchema),
+  usernameAvailability
 );
 /* eslint-enables @typescript-eslint/no-misused-promises */
 

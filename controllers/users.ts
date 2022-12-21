@@ -2,7 +2,10 @@ import { Request, Response } from "express";
 import Boom from "@hapi/boom";
 import prisma from "../prisma/prisma";
 import { Users } from "@prisma/client";
-import { apiResponse } from "../@types/apiReponse";
+import {
+  apiResponse,
+  usernameAvailabilityResponse,
+} from "../@types/apiReponse";
 
 /**
  * Route used to get the health status of the server
@@ -92,4 +95,40 @@ const patchSelfData = async (
   }
 };
 
-export { getSelfData, patchSelfData };
+const usernameAvailability = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const desiredUsername = req.params?.username;
+    let available = false;
+
+    const userData = await prisma.users.findUnique({
+      where: {
+        username: desiredUsername,
+      },
+    });
+
+    if (!userData) {
+      available = true;
+    }
+
+    const response: apiResponse<usernameAvailabilityResponse> = {
+      data: {
+        username: desiredUsername,
+        available,
+      },
+    };
+
+    return res.json(response);
+  } catch (err) {
+    logger.error("usernameAvailability:: Error while finding if user exists", {
+      err,
+    });
+    return res.boom(
+      Boom.badImplementation("An internal server error occurred")
+    );
+  }
+};
+
+export { getSelfData, patchSelfData, usernameAvailability };

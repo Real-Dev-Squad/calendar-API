@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { AnyZodObject } from "zod";
+import Boom from "@hapi/boom";
 
 const validate =
   (schema: AnyZodObject) =>
@@ -11,9 +12,13 @@ const validate =
         params: req.params,
       });
       return next();
-    } catch (error) {
-      logger.info("Error while validating data", { error });
-      return res.status(400).json(error);
+    } catch (err: any) {
+      logger.info("Error while validating data", { err });
+      return res.boom(
+        Boom.badRequest(
+          `Error while validating data: ${err?.issues[0].message}`
+        )
+      );
     }
   };
 
