@@ -121,18 +121,19 @@ enum TokenType {
 
 model AccessToken {
   id              Int          @id @default(autoincrement())
-  user            Users        @relation(fields: [userId], references: [id])
   userId          Int
+  user            Users        @relation(fields: [userId], references: [id])
   associatedEmail String
   tokenType       TokenType
   calendarId      String
   calendarType    CalendarType
   scope           String
-  expiry          Int
+  expiry          DateTime
   accessToken     String
   refreshToken    String
+  isDeleted       Boolean      @default(false)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
 
-  @@unique([userId, calendarId], name: "AccessToken_constraint")
+  @@unique([userId, calendarId], name: "AccessToken_userId_calendarId_uindex")
 }

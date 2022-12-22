@@ -1,6 +1,6 @@
 // Define the interfaces to be used for the API responses
-
 import { Payload } from "@hapi/boom";
+import { Calendar } from "@prisma/client";
 
 interface apiResponse<ResponseType> extends ResponseType {
   message?: string;
@@ -13,12 +13,20 @@ interface healthResponse {
   uptime: number;
 }
 
-interface CalendarResponse {
+interface calendarResponse {
+  rCal: rCalData[];
+  externalCalendars: externalCalendar[];
+}
+
+interface rCalData {
   id: number;
   name: string;
   ownerId: number;
-  isDeleted: boolean;
+  isPrimary: boolean;
 }
+
+interface externalCalendar
+  extends Omit<Calendar, "deleted", "ownerId", "isDeleted"> {}
 
 interface usernameAvailabilityResponse {
   username: string;
@@ -28,6 +36,8 @@ interface usernameAvailabilityResponse {
 export {
   healthResponse,
   apiResponse,
-  CalendarResponse,
+  calendarResponse,
+  rCalData,
+  externalCalendar,
   usernameAvailabilityResponse,
 };

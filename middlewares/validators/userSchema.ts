@@ -18,7 +18,7 @@ const patchUserSelfSchema = z.object({
     .strict(),
 });
 
-const usernameAvailabilitySchema = z.object({
+const usernameParamSchema = z.object({
   params: z
     .object({
       username: z.string().min(2).max(20),
@@ -26,4 +26,4 @@ const usernameAvailabilitySchema = z.object({
     .strict(),
 });
 
-export { patchUserSelfSchema, usernameAvailabilitySchema };
+export { patchUserSelfSchema, usernameParamSchema };

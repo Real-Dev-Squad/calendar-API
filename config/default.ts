@@ -80,4 +80,8 @@ export default {
       databaseUrl: "<DATABASE_URL>",
     },
   },
+
+  messages: {
+    forbidden: "You do not have permission to perform this action.",
+  },
 };
