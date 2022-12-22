@@ -3,7 +3,7 @@ import Boom from "@hapi/boom";
 import { google } from "googleapis";
 import config from "config";
 import prisma from "../prisma/prisma";
-import { apiResponse, calendarResponse } from "../@types/apiReponse";
+import { apiResponse, calendarResponse, externalCalendar, rCalData } from "../@types/apiReponse";
 
 const gcalClientId = config.get("providers.googleOauth20.clientId");
 const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
@@ -40,9 +40,11 @@ const getUserCalendar = async (
 ): Promise<Response> => {
   try {
     const { username } = req.params;
+    let externalConnectedCalendars: externalCalendar[] = [];
 
+    // Validate if cookie user is the same  as the username sent in path param
     if (req.userData?.username === username) {
-      const userCalendars: calendarResponse[] = await prisma.calendar.findMany({
+      const userCalendars: rCalData[] = await prisma.calendar.findMany({
         where: {
           ownerId: req.userData.id,
           isDeleted: false,
@@ -55,8 +57,31 @@ const getUserCalendar = async (
         },
       });
 
-      const response: apiResponse<calendarResponse[]> = {
-        data: userCalendars,
+      if (req.query?.external) {
+        // Get external calendars connected by the user
+        // @todo: Add where clause to get rows only with the specific enum values
+        externalConnectedCalendars = await prisma.accessToken.findMany({
+          where: {
+            userId: req.userData.id,
+            expiry: {
+              gt: new Date()
+            },
+            isDeleted: false,
+          },
+          select: {
+            id: true,
+            associatedEmail: true,
+            calendarId: true,
+            calendarType: true
+          },
+        });
+      }
+
+      const response: apiResponse<calendarResponse> = {
+        data: {
+          rCal: userCalendars,
+          externalCalendars: externalConnectedCalendars
+        },
       };
 
       return res.json(response);
