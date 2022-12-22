@@ -43,6 +43,7 @@ const postEvent = async (
       description: eventData.description,
       ownerId: userId,
       eventTypeId: eventTypeData.id,
+      calendarId: eventData.calendarId,
     };
 
     const parentEvent: ParentEvent = await createParentEvent(parentEventData);
