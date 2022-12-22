@@ -3,7 +3,12 @@ import Boom from "@hapi/boom";
 import { google } from "googleapis";
 import config from "config";
 import prisma from "../prisma/prisma";
-import { apiResponse, calendarResponse, externalCalendar, rCalData } from "../@types/apiReponse";
+import {
+  apiResponse,
+  calendarResponse,
+  externalCalendar,
+  rCalData,
+} from "../@types/apiReponse";
 
 const gcalClientId = config.get("providers.googleOauth20.clientId");
 const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
@@ -64,7 +69,7 @@ const getUserCalendar = async (
           where: {
             userId: req.userData.id,
             expiry: {
-              gt: new Date()
+              gt: new Date(),
             },
             isDeleted: false,
           },
@@ -72,7 +77,7 @@ const getUserCalendar = async (
             id: true,
             associatedEmail: true,
             calendarId: true,
-            calendarType: true
+            calendarType: true,
           },
         });
       }
@@ -80,7 +85,7 @@ const getUserCalendar = async (
       const response: apiResponse<calendarResponse> = {
         data: {
           rCal: userCalendars,
-          externalCalendars: externalConnectedCalendars
+          externalCalendars: externalConnectedCalendars,
         },
       };
 
