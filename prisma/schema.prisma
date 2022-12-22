@@ -37,12 +37,13 @@ model Users {
 }
 
 model Calendar {
-  id        Int     @id @default(autoincrement())
-  name      String
-  ownerId   Int
-  owner     Users?  @relation(fields: [ownerId], references: [id])
-  isPrimary Boolean @default(false)
-  isDeleted Boolean @default(false)
+  id          Int           @id @default(autoincrement())
+  name        String
+  ownerId     Int
+  owner       Users?        @relation(fields: [ownerId], references: [id])
+  isPrimary   Boolean       @default(false)
+  isDeleted   Boolean       @default(false)
+  ParentEvent ParentEvent[]
 }
 
 model EventType {
@@ -63,6 +64,8 @@ model ParentEvent {
   owner          Users?           @relation(fields: [ownerId], references: [id])
   eventTypeId    Int
   EventType      EventType?       @relation(fields: [eventTypeId], references: [id])
+  calendarId     Int
+  Calendar       Calendar?        @relation(fields: [calendarId], references: [id])
   isDeleted      Boolean          @default(false)
   ChildEvent     ChildEvent[]
   RecurringEvent RecurringEvent[]
