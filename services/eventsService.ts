@@ -11,6 +11,7 @@ const createParentEvent = async ({
   description,
   ownerId,
   eventTypeId,
+  calendarId,
 }: ParentEvent): Promise<ParentEvent> => {
   try {
     const parentEvent: ParentEvent = await prisma.parentEvent.create({
@@ -19,6 +20,7 @@ const createParentEvent = async ({
         description,
         ownerId,
         eventTypeId,
+        calendarId,
       },
     });
     return parentEvent;
