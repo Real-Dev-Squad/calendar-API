@@ -105,44 +105,15 @@ const postEvent = async (
 const getEvents = async (req: Request, res: Response): Promise<any> => {
   try {
     const { eventId } = req.params;
-    const { startTime, endTime } = req.query;
 
-    const whereQuery: { [k: string]: any } = {
-      id: Number(eventId),
-    };
+    const parentEventResponse: parentEventWithChildEventRecurringEventEventType =
+      await findParentEvent(Number(eventId));
 
-    if (startTime) {
-      whereQuery.startTime = {
-        gte: new Date(Number(startTime)),
-      };
+    if (!parentEventResponse) {
+      return res.boom(Boom.notFound("Event not found"));
     }
 
-    if (endTime) {
-      whereQuery.endTime = {
-        lte: new Date(Number(endTime)),
-      };
-    }
-
-    const event = await prisma.childEvent.findMany({
-      where: whereQuery,
-      include: {
-        Attendees: {
-          select: {
-            attendee: {
-              select: {
-                email: true,
-              },
-            },
-          },
-        },
-        parentEvent: {
-          include: {
-            RecurringEvent: true,
-          },
-        },
-      },
-    });
-
+    const event = formateParentEvent(parentEventResponse);
     return res.status(200).send({ data: event });
   } catch (err) {
     logger.error("Error while getting event", { err });
