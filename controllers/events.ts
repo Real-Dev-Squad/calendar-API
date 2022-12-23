@@ -1,20 +1,13 @@
-import {
-  ChildEvent,
-  EventType,
-  ParentEvent,
-  RecurringEvent,
-} from "@prisma/client";
+import { ChildEvent, EventType } from "@prisma/client";
 import { Request, Response } from "express";
 import Boom from "@hapi/boom";
-import { RECURRING_FREQUENCY } from "../constants/recurringFrequency";
 import prisma from "../prisma/prisma";
 import {
-  createParentEvent,
-  createChildEvent,
-  createRecurringEvent,
   createManyChildEvent,
-  createAttendeesForEvent,
+  findParentEvent,
 } from "../services/eventsService";
+import { formateParentEvent } from "../utils/formate-response";
+import { parentEventWithChildEventRecurringEventEventType } from "../@types/services";
 
 /**
  * Route used to post event
@@ -29,84 +22,71 @@ const postEvent = async (
   try {
     const userId = req.userData.id;
     const eventData = req.body;
-    const attendeesData = eventData.attendees;
+    const attendeesList = eventData.attendees ?? [];
     const recurringData = eventData.recurring;
 
+    // Get event id from event name
     const eventTypeData: EventType = await prisma.eventType.findFirstOrThrow({
       where: {
         name: eventData.eventType,
       },
     });
 
-    const parentEventData: ParentEvent | any = {
-      name: eventData.name,
-      description: eventData.description,
-      ownerId: userId,
-      eventTypeId: eventTypeData.id,
-      calendarId: eventData.calendarId,
-    };
+    // Get attnedee ids from email
+    const attendeeId = await prisma.users.findMany({
+      where: {
+        email: {
+          in: attendeesList,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
 
-    const parentEvent: ParentEvent = await createParentEvent(parentEventData);
+    const allAttendeesData = attendeeId.map((id) => {
+      return { attendeeId: id.id };
+    });
 
-    const childEventData: ChildEvent | any = {
+    const childEvent: ChildEvent | any = {
       name: eventData.name,
       description: eventData.description,
       location: eventData.location,
       startTime: new Date(eventData.startTime),
       endTime: new Date(eventData.endTime),
-      parentEventID: parentEvent.id,
-      eventTypeId: eventTypeData.id,
-    };
-
-    const childEvent = await createChildEvent(childEventData);
-
-    if (recurringData) {
-      const recurringEventData: RecurringEvent | any = {
-        eventId: parentEvent.id,
-        recurringFrequency: recurringData.recurringFrequency,
-        interval: recurringData.interval,
-        count: recurringData.count,
-        daysOfWeek: recurringData.daysOfWeek,
-        weeksOfMonth: recurringData.weeksOfMonth,
-        daysOfMonth: recurringData.daysOfMonth,
-        monthsOfYear: recurringData.monthsOfYear,
-      };
-
-      await createRecurringEvent(recurringEventData);
-
-      const recurringEventFrequency =
-        recurringData.count ??
-        RECURRING_FREQUENCY[recurringData.recurringFrequency];
-
-      await createManyChildEvent(recurringEventFrequency, childEvent);
-    }
-
-    if (attendeesData?.length) {
-      await createAttendeesForEvent(childEvent.id, attendeesData);
-    }
-
-    // TODO: change response accroding to doc
-    const event = await prisma.childEvent.findUnique({
-      where: {
-        id: childEvent.id,
+      Attendees: {
+        createMany: { data: allAttendeesData },
       },
-      include: {
-        Attendees: {
-          select: {
-            attendee: {
-              select: {
-                email: true,
-              },
-            },
-          },
+    };
+    // Prepare child recurring events
+    let recurringChildEvent: ChildEvent[] = [childEvent];
+    if (recurringData) {
+      recurringChildEvent = await createManyChildEvent(
+        recurringData,
+        childEvent
+      );
+    }
+
+    const parentEvent = await prisma.parentEvent.create({
+      data: {
+        name: eventData.name,
+        description: eventData.description,
+        ownerId: userId,
+        eventTypeId: eventTypeData.id,
+        calendarId: eventData.calendarId,
+        ChildEvent: {
+          create: recurringChildEvent,
         },
-        parentEvent: {
-          select: {
-            RecurringEvent: true,
-          },
+        RecurringEvent: {
+          create: recurringData,
         },
       },
     });
+
+    const parentEventResponse: parentEventWithChildEventRecurringEventEventType =
+      await findParentEvent(parentEvent.id);
+
+    const event = formateParentEvent(parentEventResponse);
 
     logger.info("Event created");
     return res.status(200).send({ message: "Event created", data: event });
