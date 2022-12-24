@@ -12,6 +12,7 @@
     "build": "npx tsc",
     "prestart": "npm run build",
     "start": "node dist/server.js",
+    "render-start": "nodemon server.ts",
     "dev": "cross-env NODE_ENV=development tsc-watch --onSuccess \"node ./dist/server.js\"",
     "prisma-format": "npx prisma format",
     "prisma-generate": "prisma generate"
