@@ -6,7 +6,7 @@ import {
 } from "../controllers/calendar";
 import authenticate from "../middlewares/authenticate";
 import { validate } from "../middlewares/validators/validator";
-import { usernameParamSchema } from "../middlewares/validators/userSchema";
+import { usernameParamSchema } from "../middlewares/validators/zod-schemas/users";
 
 const router = Router();
 

@@ -9,7 +9,7 @@ import { validate } from "../middlewares/validators/validator";
 import {
   patchUserSelfSchema,
   usernameParamSchema,
-} from "../middlewares/validators/userSchema";
+} from "../middlewares/validators/zod-schemas/users";
 
 const router = Router();
 
