@@ -156,5 +156,45 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
     return res.boom(Boom.badImplementation());
   }
 };
+/**
+ * Get event from calendarId with start and end time (child events)
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ */
+const deleteEvents = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { eventId } = req.params;
+    const deleteAll = Boolean(req.query.deleteAll);
 
-export { postEvent, getEvents, getCalendarEvents };
+    // Check if event Exists
+    const event = await prisma.childEvent.findUnique({
+      where: {
+        id: Number(eventId),
+      },
+    });
+    if (!event) {
+      return res.boom(Boom.notFound("Event not found"));
+    }
+    // Update ChildEvent isDeleted field
+    // Todo: to add delete this and next event
+    const updateWhereCondition: any = {
+      ...(!deleteAll && { id: Number(eventId) }),
+      ...(deleteAll && { parentEventID: event.parentEventID }),
+    };
+
+    await prisma.childEvent.updateMany({
+      where: updateWhereCondition,
+      data: {
+        isDeleted: true,
+      },
+    });
+    if (event)
+      return res.status(200).send({ message: "Event deleted successfully" });
+  } catch (err) {
+    logger.error("Error while getting event", { err });
+    return res.boom(Boom.badImplementation());
+  }
+};
+
+export { postEvent, getEvents, getCalendarEvents, deleteEvents };
