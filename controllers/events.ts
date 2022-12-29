@@ -9,10 +9,10 @@ import {
   findParentEvent,
 } from "../services/eventsService";
 import {
-  formateChildEventForResponse,
-  formateChildEventFromCalendarForResponse,
-  formateParentEventForResponse,
-} from "../utils/formate-response";
+  formatChildEventForResponse,
+  formatChildEventFromCalendarForResponse,
+  formatParentEventForResponse,
+} from "../utils/format-response";
 import { parentEventWithChildEventRecurringEventEventType } from "../@types/services";
 
 /**
@@ -93,7 +93,7 @@ const postEvent = async (
     const parentEventResponse: parentEventWithChildEventRecurringEventEventType =
       await findParentEvent(parentEvent.id);
 
-    const event = formateParentEventForResponse(parentEventResponse);
+    const event = formatParentEventForResponse(parentEventResponse);
 
     logger.info("Event created");
     return res.status(200).send({ message: "Event created", data: event });
@@ -118,7 +118,7 @@ const getEvents = async (req: Request, res: Response): Promise<any> => {
     if (!childEventResponse) {
       return res.boom(Boom.notFound("Event not found"));
     }
-    const event = formateChildEventForResponse(childEventResponse);
+    const event = formatChildEventForResponse(childEventResponse);
     return res.status(200).send({ data: event });
   } catch (err) {
     logger.error("Error while getting event", { err });
@@ -147,7 +147,7 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
       return res.boom(Boom.notFound("Event not found"));
     }
 
-    const event = formateChildEventFromCalendarForResponse(
+    const event = formatChildEventFromCalendarForResponse(
       calenderChildEventResponse
     );
     return res.status(200).send({ data: event });

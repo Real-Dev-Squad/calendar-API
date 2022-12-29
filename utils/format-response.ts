@@ -4,7 +4,7 @@ import {
   parentEventWithChildEventRecurringEventEventType,
 } from "../@types/services";
 
-const formateParentEventForResponse = (
+const formatParentEventForResponse = (
   event: parentEventWithChildEventRecurringEventEventType | null
 ): any => {
   const { ChildEvent, EventType, RecurringEvent, ...parentEvent } = event ?? {};
@@ -32,7 +32,7 @@ const formateParentEventForResponse = (
   return formattedData;
 };
 
-const formateChildEventForResponse = (event: any): any => {
+const formatChildEventForResponse = (event: any): any => {
   const { ParentEvent, Attendees, ...childEvent } = event ?? {};
   const { id, name, description, calendarId, location, startTime, endTime } =
     childEvent as ChildEvent;
@@ -55,16 +55,16 @@ const formateChildEventForResponse = (event: any): any => {
 
   return formattedData;
 };
-const formateChildEventFromCalendarForResponse = (events: any): any => {
+const formatChildEventFromCalendarForResponse = (events: any): any => {
   const formattedEvent = events.map((event: any) => {
-    return formateChildEventForResponse(event);
+    return formatChildEventForResponse(event);
   });
 
   return formattedEvent;
 };
 
 export {
-  formateParentEventForResponse,
-  formateChildEventForResponse,
-  formateChildEventFromCalendarForResponse,
+  formatParentEventForResponse,
+  formatChildEventForResponse,
+  formatChildEventFromCalendarForResponse,
 };
