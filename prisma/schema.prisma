@@ -44,6 +44,7 @@ model Calendar {
   isPrimary   Boolean       @default(false)
   isDeleted   Boolean       @default(false)
   ParentEvent ParentEvent[]
+  ChildEvent  ChildEvent[]
 }
 
 model EventType {
@@ -78,8 +79,10 @@ model ChildEvent {
   location      String?
   startTime     DateTime
   endTime       DateTime
+  calendarId    Int
+  Calendar      Calendar?   @relation(fields: [calendarId], references: [id])
   parentEventID Int
-  parentEvent   ParentEvent @relation(fields: [parentEventID], references: [id])
+  ParentEvent   ParentEvent @relation(fields: [parentEventID], references: [id])
   isDeleted     Boolean     @default(false)
   Attendees     Attendees[]
 }

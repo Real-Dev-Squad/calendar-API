@@ -44,8 +44,38 @@ const createManyChildEvent = async (
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
-// const handelDailyEventsTimeUpdate = () => {};
+const findChildEvent = async (childEventId: number): Promise<any> => {
+  try {
+    const event = await prisma.childEvent.findFirst({
+      where: {
+        id: childEventId,
+        isDeleted: false,
+      },
+      include: {
+        ParentEvent: {
+          select: {
+            RecurringEvent: true,
+          },
+        },
+        Attendees: {
+          select: {
+            attendee: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return event;
+  } catch (err) {
+    logger.error("childEvent: error while finding child event", {
+      err,
+    });
+    throw err;
+  }
+};
 
 const findParentEvent = async (parentEventId: number): Promise<any> => {
   try {
@@ -96,4 +126,48 @@ const findParentEvent = async (parentEventId: number): Promise<any> => {
   }
 };
 
-export { createManyChildEvent, findParentEvent };
+const findChildEventFromCalendar = async (
+  calendarId: number,
+  startTime: number,
+  endTime: number
+): Promise<any> => {
+  try {
+    const whereCondition: {} = {
+      calendarId,
+      isDeleted: false,
+      ...(startTime && { startTime: { gte: new Date(startTime) } }),
+      ...(endTime && { endTime: { lte: new Date(endTime) } }),
+    };
+
+    // TODO: add pagination
+
+    const event = await prisma.childEvent.findMany({
+      where: whereCondition,
+      include: {
+        Attendees: {
+          select: {
+            attendee: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return event;
+  } catch (err) {
+    logger.error("parentEvent: error while finding parent event", {
+      err,
+    });
+    throw err;
+  }
+};
+
+export {
+  createManyChildEvent,
+  findParentEvent,
+  findChildEvent,
+  findChildEventFromCalendar,
+};
