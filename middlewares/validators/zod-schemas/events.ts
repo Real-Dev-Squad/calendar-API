@@ -36,4 +36,20 @@ const postEventSchema = z.object({
     .strict(),
 });
 
-export { postEventSchema };
+const getEventSchema = z.object({
+  params: z.object({
+    eventId: z.preprocess((a) => Number(a), z.number().positive()),
+  }),
+});
+
+const getCalenderEventSchema = z.object({
+  params: z.object({
+    calendarId: z.preprocess((a) => Number(a), z.number().positive()),
+  }),
+  query: z.object({
+    startTime: z.preprocess((a) => Number(a), z.number().positive()).optional(),
+    endTime: z.preprocess((a) => Number(a), z.number().positive()).optional(),
+  }),
+});
+
+export { postEventSchema, getEventSchema, getCalenderEventSchema };
