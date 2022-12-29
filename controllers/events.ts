@@ -165,6 +165,7 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
 const deleteEvents = async (req: Request, res: Response): Promise<any> => {
   try {
     const { eventId } = req.params;
+    const deleteAll = Boolean(req.query.deleteAll);
 
     // Check if event Exists
     const event = await prisma.childEvent.findUnique({
@@ -176,11 +177,14 @@ const deleteEvents = async (req: Request, res: Response): Promise<any> => {
       return res.boom(Boom.notFound("Event not found"));
     }
     // Update ChildEvent isDeleted field
-    // TODO: delete multiple events
-    await prisma.childEvent.update({
-      where: {
-        id: Number(eventId),
-      },
+    // Todo: to add delete this and next event
+    const updateWhereCondition: any = {
+      ...(!deleteAll && { id: Number(eventId) }),
+      ...(deleteAll && { parentEventID: event.parentEventID }),
+    };
+
+    await prisma.childEvent.updateMany({
+      where: updateWhereCondition,
       data: {
         isDeleted: true,
       },
