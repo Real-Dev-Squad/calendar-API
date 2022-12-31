@@ -81,7 +81,7 @@ const loginOrSignupWithGoogle = async (
 
       return createdUser;
     }
-  } catch (err) {
+  } catch (err: any) {
     logger.error("loginOrSignupWithGoogle:: Error in authenticating user", {
       err,
     });
@@ -132,7 +132,7 @@ const loginOrSignupWithMicrosoft = async (
 
       return createdUser;
     }
-  } catch (err) {
+  } catch (err: any) {
     logger.error("loginOrSignupWithGoogle:: Error in authenticating user", {
       err,
     });

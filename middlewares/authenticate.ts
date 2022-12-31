@@ -80,7 +80,7 @@ const authenticate = async (
         return res.boom(Boom.unauthorized("Unauthenticated User"));
       }
     } else {
-      logger.error("User cannot be authenticated.", { err });
+      logger.error("User cannot be authenticated.", { error: err.stack });
       return res.boom(Boom.unauthorized("Unauthenticated User"));
     }
   }

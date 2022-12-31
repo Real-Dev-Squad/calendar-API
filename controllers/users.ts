@@ -38,8 +38,8 @@ const getSelfData = (req: Request, res: Response): Response => {
 
     logger.info("User does not exist, as req.userData is empty");
     return res.boom(Boom.notFound("User doesn't exist"));
-  } catch (err) {
-    logger.error("Error while fetching user", { err });
+  } catch (err: any) {
+    logger.error("Error while fetching user", { error: err.stack });
     return res.boom(
       Boom.badImplementation("An internal server error occurred")
     );
@@ -69,7 +69,7 @@ const patchSelfData = async (
         isOnboarded:
           isOnboarded !== undefined
             ? isOnboarded
-            : onboardingUserData.isOnboarded,
+            : onboardingUserData?.isOnboarded,
       },
     };
 
@@ -87,8 +87,8 @@ const patchSelfData = async (
     };
 
     return res.json(response);
-  } catch (err) {
-    logger.error("Error while updating user", { err });
+  } catch (err: any) {
+    logger.error("Error while updating user", { err: err.stack });
     return res.boom(
       Boom.badImplementation("An internal server error occurred")
     );
@@ -121,7 +121,7 @@ const usernameAvailability = async (
     };
 
     return res.json(response);
-  } catch (err) {
+  } catch (err: any) {
     logger.error("usernameAvailability:: Error while finding if user exists", {
       err,
     });
