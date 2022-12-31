@@ -65,7 +65,7 @@ function onListening(): void {
     `Express API running on port:${port} with environment:${String(
       process.env.NODE_ENV
     )}`,
-      { version }
+    { version }
   );
 }
 
