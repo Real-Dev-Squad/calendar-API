@@ -43,7 +43,7 @@ const googleAuthCallback = (
 
       return res.redirect(rCalUiUrl.href);
     })(req, res, next);
-  } catch (err) {
+  } catch (err: any) {
     logger.error(err);
 
     // Redirect to an error page in case of an error
@@ -80,7 +80,7 @@ const microsoftAuthCallback = (
 
       return res.redirect(rCalUiUrl.href);
     })(req, res, next);
-  } catch (err) {
+  } catch (err: any) {
     logger.error(err);
 
     // Redirect to an error page in case of an error
