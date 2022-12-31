@@ -2,6 +2,7 @@ import config from "config";
 import logger from "./utils/logger";
 import * as http from "http";
 import app from "./app";
+import { version } from "./package.json";
 import ErrnoException = NodeJS.ErrnoException;
 
 // Initialise globals
@@ -63,7 +64,8 @@ function onListening(): void {
   logger.info(
     `Express API running on port:${port} with environment:${String(
       process.env.NODE_ENV
-    )}`
+    )}`,
+      { version }
   );
 }
 
