@@ -98,7 +98,9 @@ const getUserCalendar = async (
 
     return res.boom(Boom.forbidden(config.get("messages.forbidden")));
   } catch (err: any) {
-    logger.error("Error while fetching user calendar data", { error: err.stack });
+    logger.error("Error while fetching user calendar data", {
+      error: err.stack,
+    });
     return res.boom(Boom.badImplementation());
   }
 };
