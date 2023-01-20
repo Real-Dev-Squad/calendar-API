@@ -6,6 +6,25 @@ import * as authService from "../services/authService";
 import { apiResponse } from "../@types/apiReponse";
 
 /**
+ * Makes authentication call to google statergy
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ * @param next {Function} - Express middleware function
+ */
+const googleAuthLogin = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): any => {
+  const redirectURL = req.query.redirectURL as string;
+  return passport.authenticate("google", {
+    scope: ["email", "profile"],
+    state: redirectURL,
+  })(req, res, next);
+};
+
+/**
  * Fetches the user info from Google and authenticates User
  *
  * @param req {Object} - Express request object
@@ -17,7 +36,16 @@ const googleAuthCallback = (
   res: Response,
   next: NextFunction
 ): void => {
-  const rCalUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
+  const redirectURL = req.query.state as string;
+
+  let rCalUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
+
+  try {
+    rCalUiUrl = new URL(redirectURL);
+  } catch (error) {
+    logger.error("Invalid redirect URL provided");
+    logger.error(error);
+  }
 
   try {
     return passport.authenticate("google", {}, async (err, _, user) => {
@@ -106,4 +134,4 @@ const logOut = (_req: Request, res: Response): Response => {
   return res.status(200).json(response);
 };
 
-export { googleAuthCallback, microsoftAuthCallback, logOut };
+export { googleAuthLogin, googleAuthCallback, microsoftAuthCallback, logOut };
