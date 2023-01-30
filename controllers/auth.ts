@@ -69,7 +69,7 @@ const googleAuthCallback = (
         sameSite: "lax",
       });
 
-      return res.redirect(redirectURL || rCalUiUrl.href);
+      return res.redirect(rCalUiUrl.href);
     })(req, res, next);
   } catch (err: any) {
     logger.error(err);
