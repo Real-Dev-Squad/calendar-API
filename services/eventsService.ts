@@ -1,16 +1,4 @@
-import { addDays, addWeeks, addMonths, addYears } from "date-fns";
 import prisma from "../prisma/prisma";
-
-const DATE_ADD_MAPPING: any = {
-  DAILY: addDays,
-  WEEKLY: addWeeks,
-  MONTHLY: addMonths,
-  YEARLY: addYears,
-};
-Object.freeze(DATE_ADD_MAPPING);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/explicit-function-return-type
-// const handelDailyEventsTimeUpdate = () => {};
 
 const findEvent = async (eventId: number): Promise<any> => {
   try {

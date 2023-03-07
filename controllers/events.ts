@@ -26,7 +26,7 @@ const postEvent = async (
       },
     });
 
-    // Get attnedee ids from email
+    // Get attendee ids from email
     const attendeeId = await prisma.users.findMany({
       where: {
         email: {
