@@ -31,7 +31,7 @@ model Users {
   updatedAt          DateTime      @updatedAt
   Calendar           Calendar[]
   EventType          EventType[]
-  Event              Event[]
+  ParentEvent        ParentEvent[]
   Attendees          Attendees[]
   AccessToken        AccessToken[]
 }
@@ -43,41 +43,48 @@ model Calendar {
   owner     Users?  @relation(fields: [ownerId], references: [id])
   isPrimary Boolean @default(false)
   isDeleted Boolean @default(false)
-  Event     Event[]
 }
 
 model EventType {
-  id           Int     @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   appGenerated Boolean
   ownerId      Int
-  owner        Users?  @relation(fields: [ownerId], references: [id])
-  isDeleted    Boolean @default(false)
-  Event        Event[]
+  owner        Users?        @relation(fields: [ownerId], references: [id])
+  isDeleted    Boolean       @default(false)
+  ParentEvent  ParentEvent[]
 }
 
-model Event {
+model ParentEvent {
   id             Int              @id @default(autoincrement())
   name           String
   description    String?
-  location       String?
-  startTime      DateTime
-  endTime        DateTime
   ownerId        Int
   owner          Users?           @relation(fields: [ownerId], references: [id])
   eventTypeId    Int
-  EventType      EventType?       @relation(fields: [eventTypeId], references: [id])
-  calendarId     Int
-  Calendar       Calendar?        @relation(fields: [calendarId], references: [id])
+  eventType      EventType?       @relation(fields: [eventTypeId], references: [id])
   isDeleted      Boolean          @default(false)
+  ChildEvent     ChildEvent[]
   RecurringEvent RecurringEvent[]
-  Attendees      Attendees[]
+}
+
+model ChildEvent {
+  id            Int         @id @default(autoincrement())
+  name          String
+  description   String?
+  location      String?
+  startTime     DateTime
+  endTime       DateTime
+  parentEventID Int
+  parentEvent   ParentEvent @relation(fields: [parentEventID], references: [id])
+  isDeleted     Boolean     @default(false)
+  Attendees     Attendees[]
 }
 
 model RecurringEvent {
   id                 Int                 @id @default(autoincrement())
   eventId            Int
-  event              Event               @relation(fields: [eventId], references: [id])
+  event              ParentEvent         @relation(fields: [eventId], references: [id])
   recurringFrequency RecurringFrequency?
   interval           Int?
   count              Int?
@@ -96,11 +103,11 @@ enum RecurringFrequency {
 }
 
 model Attendees {
-  id         Int   @id @default(autoincrement())
+  id         Int        @id @default(autoincrement())
   eventId    Int
-  event      Event @relation(fields: [eventId], references: [id])
+  event      ChildEvent @relation(fields: [eventId], references: [id])
   attendeeId Int
-  attendee   Users @relation(fields: [attendeeId], references: [id])
+  attendee   Users      @relation(fields: [attendeeId], references: [id])
 }
 
 enum CalendarType {
