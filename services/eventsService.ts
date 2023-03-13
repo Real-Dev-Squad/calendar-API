@@ -34,4 +34,43 @@ const findEvent = async (eventId: number): Promise<any> => {
   }
 };
 
-export { findEvent };
+const findEventFromCalendar = async (
+  calendarId: number,
+  startTime: number,
+  endTime: number
+): Promise<any> => {
+  try {
+    const whereCondition: {} = {
+      calendarId,
+      isDeleted: false,
+      ...(startTime && { startTime: { gte: new Date(startTime) } }),
+      ...(endTime && { endTime: { lte: new Date(endTime) } }),
+    };
+
+    // TODO: add pagination
+
+    const event = await prisma.event.findMany({
+      where: whereCondition,
+      include: {
+        Attendees: {
+          select: {
+            attendee: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return event;
+  } catch (err) {
+    logger.error("parentEvent: error while finding parent event", {
+      err,
+    });
+    throw err;
+  }
+};
+
+export { findEvent, findEventFromCalendar };
