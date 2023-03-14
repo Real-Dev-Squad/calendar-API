@@ -1,3 +1,4 @@
+import { eventWithAttendees } from "../@types/apiReponse";
 import prisma from "../prisma/prisma";
 
 const findEvent = async (eventId: number): Promise<any> => {
@@ -38,7 +39,7 @@ const findEventFromCalendar = async (
   calendarId: number,
   startTime: number,
   endTime: number
-): Promise<any> => {
+): Promise<eventWithAttendees[]> => {
   try {
     const whereCondition: {} = {
       calendarId,
@@ -49,7 +50,7 @@ const findEventFromCalendar = async (
 
     // TODO: add pagination
 
-    const event = await prisma.event.findMany({
+    const event: eventWithAttendees[] = await prisma.event.findMany({
       where: whereCondition,
       include: {
         Attendees: {
