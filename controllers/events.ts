@@ -2,7 +2,7 @@ import { Event, EventType } from "@prisma/client";
 import { Request, Response } from "express";
 import Boom from "@hapi/boom";
 import prisma from "../prisma/prisma";
-import { findEvent } from "../services/eventsService";
+import { findEvent, findEventFromCalendar } from "../services/eventsService";
 
 /**
  * Route used to post event
@@ -60,9 +60,9 @@ const postEvent = async (
     const event = await prisma.event.create({
       data: eventObject,
     });
+    logger.info("Event created");
 
     const respEvent: Event = await findEvent(event.id);
-    logger.info("Event created");
 
     return res.status(200).send({ message: "Event created", data: respEvent });
   } catch (err: any) {
@@ -71,4 +71,53 @@ const postEvent = async (
   }
 };
 
-export { postEvent };
+/**
+ * Get event from eventId (child Events)
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ */
+const getEvents = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { eventId } = req.params;
+
+    const respEvent: Event = await findEvent(Number(eventId));
+
+    if (!respEvent) {
+      return res.boom(Boom.notFound("Event not found"));
+    }
+    return res.status(200).send({ data: respEvent });
+  } catch (err) {
+    logger.error("Error while getting event", { err });
+    return res.boom(Boom.badImplementation());
+  }
+};
+
+/**
+ * Get event from calendarId with start and end time (child events)
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ */
+const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { calendarId } = req.params;
+    const { startTime, endTime } = req.query;
+
+    const eventResponse: any = await findEventFromCalendar(
+      Number(calendarId),
+      Number(startTime),
+      Number(endTime)
+    );
+
+    if (!eventResponse) {
+      return res.boom(Boom.notFound("Event not found"));
+    }
+    return res.status(200).send({ data: eventResponse });
+  } catch (err) {
+    logger.error("Error while getting event", { err });
+    return res.boom(Boom.badImplementation());
+  }
+};
+
+export { postEvent, getEvents, getCalendarEvents };

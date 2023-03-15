@@ -33,6 +33,10 @@ interface usernameAvailabilityResponse {
   available: boolean;
 }
 
+interface eventWithAttendees extends ChildEvent {
+  Attendees?: Attendees[];
+}
+
 export {
   healthResponse,
   apiResponse,
@@ -40,4 +44,5 @@ export {
   rCalData,
   externalCalendar,
   usernameAvailabilityResponse,
+  eventWithAttendees,
 };
