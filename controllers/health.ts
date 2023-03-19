@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
-import { apiResponse, healthResponse } from "../@types/apiReponse";
-import { version } from "../package.json";
+import { Request, Response } from 'express';
+import { apiResponse, healthResponse } from '../@types/apiReponse';
+import { version } from '../package.json';
 
 /**
  * Route used to get the health status of the server

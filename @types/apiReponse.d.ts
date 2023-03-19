@@ -1,6 +1,6 @@
 // Define the interfaces to be used for the API responses
-import { Payload } from "@hapi/boom";
-import { Calendar } from "@prisma/client";
+import { Payload } from '@hapi/boom';
+import { Calendar } from '@prisma/client';
 
 interface apiResponse<ResponseType> extends ResponseType {
   message?: string;
@@ -26,7 +26,7 @@ interface rCalData {
 }
 
 interface externalCalendar
-  extends Omit<Calendar, "deleted", "ownerId", "isDeleted"> {}
+  extends Omit<Calendar, 'deleted', 'ownerId', 'isDeleted'> {}
 
 interface usernameAvailabilityResponse {
   username: string;

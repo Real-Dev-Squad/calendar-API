@@ -1,4 +1,4 @@
-import morgan, { StreamOptions } from "morgan";
+import morgan, { StreamOptions } from 'morgan';
 
 // Override the stream method by telling
 // Morgan to use our custom logger instead of the console.log.
@@ -8,6 +8,6 @@ const stream: StreamOptions = {
 };
 
 // morgan middleware to stream HTTP logs to winston logger
-const morganMiddleware = morgan("combined", { stream });
+const morganMiddleware = morgan('combined', { stream });
 
 export default morganMiddleware;

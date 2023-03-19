@@ -1,18 +1,18 @@
-import { Request, Response } from "express";
-import Boom from "@hapi/boom";
-import { google } from "googleapis";
-import config from "config";
-import prisma from "../prisma/prisma";
+import { Request, Response } from 'express';
+import Boom from '@hapi/boom';
+import { google } from 'googleapis';
+import config from 'config';
+import prisma from '../prisma/prisma';
 import {
   apiResponse,
   calendarResponse,
   externalCalendar,
   rCalData,
-} from "../@types/apiReponse";
+} from '../@types/apiReponse';
 
-const gcalClientId = config.get("providers.googleOauth20.clientId");
-const gcalClientSecret = config.get("providers.googleOauth20.clientSecret");
-const calApiUrl = config.get("services.calendarApi.baseUrl");
+const gcalClientId = config.get('providers.googleOauth20.clientId');
+const gcalClientSecret = config.get('providers.googleOauth20.clientSecret');
+const calApiUrl = config.get('services.calendarApi.baseUrl');
 
 const oauth2Client = new google.auth.OAuth2(
   String(gcalClientId),
@@ -20,11 +20,11 @@ const oauth2Client = new google.auth.OAuth2(
   `${String(calApiUrl)}/api/v1/calendar/google/callback`
 );
 
-const scopes = ["https://www.googleapis.com/auth/calendar"];
+const scopes = ['https://www.googleapis.com/auth/calendar'];
 
 const googleConnectHandler = (_: Request, res: Response): void => {
   const url = oauth2Client.generateAuthUrl({
-    access_type: "offline",
+    access_type: 'offline',
     scope: scopes,
   });
 
@@ -33,7 +33,7 @@ const googleConnectHandler = (_: Request, res: Response): void => {
 
 const googleCallbackHandler = (_: Request, res: Response): void => {
   const redirectUrl = `${String(
-    config.get("services.rCalUi.baseUrl")
+    config.get('services.rCalUi.baseUrl')
   )}/onboarding`;
 
   return res.redirect(redirectUrl);
@@ -93,12 +93,12 @@ const getUserCalendar = async (
     }
 
     logger.error(
-      "User does have permission to get calender, as req.userData.username !== req.params.username"
+      'User does have permission to get calender, as req.userData.username !== req.params.username'
     );
 
-    return res.boom(Boom.forbidden(config.get("messages.forbidden")));
+    return res.boom(Boom.forbidden(config.get('messages.forbidden')));
   } catch (err: any) {
-    logger.error("Error while fetching user calendar data", {
+    logger.error('Error while fetching user calendar data', {
       error: err.stack,
     });
     return res.boom(Boom.badImplementation());

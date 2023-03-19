@@ -1,15 +1,15 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getSelfData,
   patchSelfData,
   usernameAvailability,
-} from "../controllers/users";
-import authenticate from "../middlewares/authenticate";
-import { validate } from "../middlewares/validators/validator";
+} from '../controllers/users';
+import authenticate from '../middlewares/authenticate';
+import { validate } from '../middlewares/validators/validator';
 import {
   patchUserSelfSchema,
   usernameParamSchema,
-} from "../middlewares/validators/zod-schemas/users";
+} from '../middlewares/validators/zod-schemas/users';
 
 const router = Router();
 
@@ -20,17 +20,17 @@ const router = Router();
  * */
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-router.get("/self", authenticate, getSelfData);
+router.get('/self', authenticate, getSelfData);
 
 router.patch(
-  "/self",
+  '/self',
   authenticate,
   validate(patchUserSelfSchema),
   patchSelfData
 );
 
 router.get(
-  "/usernameCheck/:username",
+  '/usernameCheck/:username',
   authenticate,
   validate(usernameParamSchema),
   usernameAvailability

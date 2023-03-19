@@ -11,7 +11,7 @@ export default {
 
   services: {
     rCalUi: {
-      baseUrl: "https://rds-website-calendar.fly.dev",
+      baseUrl: 'https://rds-website-calendar.fly.dev',
     },
   },
 };

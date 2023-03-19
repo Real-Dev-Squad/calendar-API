@@ -1,8 +1,8 @@
-import { Event, EventType } from "@prisma/client";
-import { Request, Response } from "express";
-import Boom from "@hapi/boom";
-import prisma from "../prisma/prisma";
-import { findEvent, findEventFromCalendar } from "../services/eventsService";
+import { Event, EventType } from '@prisma/client';
+import { Request, Response } from 'express';
+import Boom from '@hapi/boom';
+import prisma from '../prisma/prisma';
+import { findEvent, findEventFromCalendar } from '../services/eventsService';
 
 /**
  * Route used to post event
@@ -60,13 +60,13 @@ const postEvent = async (
     const event = await prisma.event.create({
       data: eventObject,
     });
-    logger.info("Event created");
+    logger.info('Event created');
 
     const respEvent: Event = await findEvent(event.id);
 
-    return res.status(200).send({ message: "Event created", data: respEvent });
+    return res.status(200).send({ message: 'Event created', data: respEvent });
   } catch (err: any) {
-    logger.error("Error while creating event", { err });
+    logger.error('Error while creating event', { err });
     return res.boom(Boom.badImplementation());
   }
 };
@@ -84,11 +84,11 @@ const getEvents = async (req: Request, res: Response): Promise<any> => {
     const respEvent: Event = await findEvent(Number(eventId));
 
     if (!respEvent) {
-      return res.boom(Boom.notFound("Event not found"));
+      return res.boom(Boom.notFound('Event not found'));
     }
     return res.status(200).send({ data: respEvent });
   } catch (err) {
-    logger.error("Error while getting event", { err });
+    logger.error('Error while getting event', { err });
     return res.boom(Boom.badImplementation());
   }
 };
@@ -111,11 +111,11 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
     );
 
     if (!eventResponse) {
-      return res.boom(Boom.notFound("Event not found"));
+      return res.boom(Boom.notFound('Event not found'));
     }
     return res.status(200).send({ data: eventResponse });
   } catch (err) {
-    logger.error("Error while getting event", { err });
+    logger.error('Error while getting event', { err });
     return res.boom(Boom.badImplementation());
   }
 };

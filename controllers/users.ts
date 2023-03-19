@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import Boom from "@hapi/boom";
-import prisma from "../prisma/prisma";
-import { Users } from "@prisma/client";
+import { Request, Response } from 'express';
+import Boom from '@hapi/boom';
+import prisma from '../prisma/prisma';
+import { Users } from '@prisma/client';
 import {
   apiResponse,
   usernameAvailabilityResponse,
-} from "../@types/apiReponse";
+} from '../@types/apiReponse';
 
 /**
  * Route used to get the health status of the server
@@ -36,12 +36,12 @@ const getSelfData = (req: Request, res: Response): Response => {
       return res.json(response);
     }
 
-    logger.info("User does not exist, as req.userData is empty");
+    logger.info('User does not exist, as req.userData is empty');
     return res.boom(Boom.notFound("User doesn't exist"));
   } catch (err: any) {
-    logger.error("Error while fetching user", { error: err.stack });
+    logger.error('Error while fetching user', { error: err.stack });
     return res.boom(
-      Boom.badImplementation("An internal server error occurred")
+      Boom.badImplementation('An internal server error occurred')
     );
   }
 };
@@ -80,17 +80,17 @@ const patchSelfData = async (
       data,
     });
 
-    logger.info("User data updated");
+    logger.info('User data updated');
 
     const response: apiResponse<null> = {
-      message: "User data updated",
+      message: 'User data updated',
     };
 
     return res.json(response);
   } catch (err: any) {
-    logger.error("Error while updating user", { err: err.stack });
+    logger.error('Error while updating user', { err: err.stack });
     return res.boom(
-      Boom.badImplementation("An internal server error occurred")
+      Boom.badImplementation('An internal server error occurred')
     );
   }
 };
@@ -122,11 +122,11 @@ const usernameAvailability = async (
 
     return res.json(response);
   } catch (err: any) {
-    logger.error("usernameAvailability:: Error while finding if user exists", {
+    logger.error('usernameAvailability:: Error while finding if user exists', {
       err,
     });
     return res.boom(
-      Boom.badImplementation("An internal server error occurred")
+      Boom.badImplementation('An internal server error occurred')
     );
   }
 };

@@ -1,11 +1,11 @@
-import winston from "winston";
-import config from "config";
+import winston from 'winston';
+import config from 'config';
 
 // define the custom settings for each transport (file, console)
 const options = {
   file: {
-    level: String(config.get("logs.logLevel")),
-    filename: "logs/app.log",
+    level: String(config.get('logs.logLevel')),
+    filename: 'logs/app.log',
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -13,11 +13,11 @@ const options = {
     colorize: false,
   },
   console: {
-    level: String(config.get("logs.logLevel")),
+    level: String(config.get('logs.logLevel')),
     handleExceptions: true,
     json: false,
     colorize: true,
-    silent: process.env.NODE_ENV === "test", // Disable logs in test env
+    silent: process.env.NODE_ENV === 'test', // Disable logs in test env
   },
 };
 
@@ -33,10 +33,10 @@ const logger: winston.Logger = winston.createLogger({
    * Modifications to be made through environment variables defined in config files
    */
   transports: [
-    ...(config.get("logs.enableFileLogs") === true
+    ...(config.get('logs.enableFileLogs') === true
       ? [new winston.transports.File(options.file)]
       : []),
-    ...(config.get("logs.enableConsoleLogs") === true
+    ...(config.get('logs.enableConsoleLogs') === true
       ? [new winston.transports.Console(options.console)]
       : []),
   ],

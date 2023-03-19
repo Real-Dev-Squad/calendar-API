@@ -1,5 +1,5 @@
-import { eventWithAttendees } from "../@types/apiReponse";
-import prisma from "../prisma/prisma";
+import { eventWithAttendees } from '../@types/apiReponse';
+import prisma from '../prisma/prisma';
 
 const findEvent = async (eventId: number): Promise<any> => {
   try {
@@ -28,7 +28,7 @@ const findEvent = async (eventId: number): Promise<any> => {
     });
     return event;
   } catch (err) {
-    logger.error("Event: error while finding parent event", {
+    logger.error('Event: error while finding parent event', {
       err,
     });
     throw err;
@@ -67,7 +67,7 @@ const findEventFromCalendar = async (
 
     return event;
   } catch (err) {
-    logger.error("parentEvent: error while finding parent event", {
+    logger.error('parentEvent: error while finding parent event', {
       err,
     });
     throw err;
