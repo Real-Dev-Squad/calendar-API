@@ -1,8 +1,8 @@
-import jwt from "jsonwebtoken";
-import { GoogleOAuthJson, MicrosoftOAuthJson } from "../@types/providers";
-import prisma from "../prisma/prisma";
-import { jwtPayload } from "../@types/services";
-import { Users } from "@prisma/client";
+import jwt from 'jsonwebtoken';
+import { GoogleOAuthJson, MicrosoftOAuthJson } from '../@types/providers';
+import prisma from '../prisma/prisma';
+import { jwtPayload } from '../@types/services';
+import { Users } from '@prisma/client';
 
 /**
  * Generates the JWT
@@ -11,9 +11,9 @@ import { Users } from "@prisma/client";
  * @return {String} - Generated JWT
  */
 const generateAuthToken = (payload: jwtPayload): string => {
-  return jwt.sign(payload, config.get("userAccessToken.privateKey"), {
-    algorithm: "RS256",
-    expiresIn: config.get("userAccessToken.ttl"),
+  return jwt.sign(payload, config.get('userAccessToken.privateKey'), {
+    algorithm: 'RS256',
+    expiresIn: config.get('userAccessToken.ttl'),
   });
 };
 
@@ -24,8 +24,8 @@ const generateAuthToken = (payload: jwtPayload): string => {
  * @return {Object} - Decode value of JWT
  */
 const verifyAuthToken = (token: string): any => {
-  return jwt.verify(token, config.get("userAccessToken.publicKey"), {
-    algorithms: ["RS256"],
+  return jwt.verify(token, config.get('userAccessToken.publicKey'), {
+    algorithms: ['RS256'],
   });
 };
 
@@ -82,11 +82,11 @@ const loginOrSignupWithGoogle = async (
       return createdUser;
     }
   } catch (err: any) {
-    logger.error("loginOrSignupWithGoogle:: Error in authenticating user", {
+    logger.error('loginOrSignupWithGoogle:: Error in authenticating user', {
       err,
     });
 
-    throw new Error("");
+    throw new Error('');
   }
 };
 
@@ -133,11 +133,11 @@ const loginOrSignupWithMicrosoft = async (
       return createdUser;
     }
   } catch (err: any) {
-    logger.error("loginOrSignupWithGoogle:: Error in authenticating user", {
+    logger.error('loginOrSignupWithGoogle:: Error in authenticating user', {
       err,
     });
 
-    throw new Error("");
+    throw new Error('');
   }
 };
 

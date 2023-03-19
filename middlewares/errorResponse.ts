@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
-import { Payload } from "@hapi/boom";
-import { apiResponse } from "../@types/apiReponse";
+import { NextFunction, Request, Response } from 'express';
+import { Payload } from '@hapi/boom';
+import { apiResponse } from '../@types/apiReponse';
 
 /**
  * Creates the error response and sends in the apiResponse format
@@ -27,7 +27,7 @@ const createErrorResponse = (
       boomResponse = {
         statusCode: 500,
         error: boomError,
-        message: "Internal Server Error",
+        message: 'Internal Server Error',
       };
     }
 

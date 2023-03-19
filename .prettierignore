@@ -1,0 +1,9 @@
+node_modules
+dist
+prisma
+package.json
+package-lock.json
+tsconfig.json
+pnpm-lock.yaml
+.github
+README.md

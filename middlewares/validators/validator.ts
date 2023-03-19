@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import { AnyZodObject } from "zod";
-import Boom from "@hapi/boom";
+import { Request, Response, NextFunction } from 'express';
+import { AnyZodObject } from 'zod';
+import Boom from '@hapi/boom';
 
 const validate =
   (schema: AnyZodObject) =>
@@ -13,7 +13,7 @@ const validate =
       });
       return next();
     } catch (err: any) {
-      logger.info("Error while validating data", { error: err.stack });
+      logger.info('Error while validating data', { error: err.stack });
       return res.boom(
         Boom.badRequest(
           `Error while validating data: ${err?.issues[0].message}`

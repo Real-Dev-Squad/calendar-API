@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-const EVENT_TYPE = ["event"] as const;
+const EVENT_TYPE = ['event'] as const;
 
 const postEventSchema = z.object({
   body: z

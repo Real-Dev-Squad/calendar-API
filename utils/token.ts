@@ -1,4 +1,4 @@
-import { AccessToken, Prisma, PrismaClient } from "@prisma/client";
+import { AccessToken, Prisma, PrismaClient } from '@prisma/client';
 
 type TokenArgs = Prisma.AccessTokenUncheckedCreateInput;
 

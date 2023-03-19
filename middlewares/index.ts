@@ -1,14 +1,14 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import helmet from "helmet";
-import cors from "cors";
-import config from "config";
-import passport from "passport";
-import * as dotenv from "dotenv";
-import morganMiddleware from "../utils/httpLogger";
-import "../providers/google";
-import "../providers/microsoft";
-import errorResponse from "./errorResponse";
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import cors from 'cors';
+import config from 'config';
+import passport from 'passport';
+import * as dotenv from 'dotenv';
+import morganMiddleware from '../utils/httpLogger';
+import '../providers/google';
+import '../providers/microsoft';
+import errorResponse from './errorResponse';
 
 const middleware = (app: express.Application): void => {
   // Load vars from .env to process.env
@@ -39,7 +39,7 @@ const middleware = (app: express.Application): void => {
   // Configure CORS
   app.use(
     cors({
-      origin: config.get("cors.allowedOrigins"),
+      origin: config.get('cors.allowedOrigins'),
       credentials: true,
       optionsSuccessStatus: 200,
     })

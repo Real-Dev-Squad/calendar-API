@@ -1,9 +1,9 @@
-import passport from "passport";
-import Boom from "@hapi/boom";
-import { NextFunction, Request, Response } from "express";
-import logger from "../utils/logger";
-import * as authService from "../services/authService";
-import { apiResponse } from "../@types/apiReponse";
+import passport from 'passport';
+import Boom from '@hapi/boom';
+import { NextFunction, Request, Response } from 'express';
+import logger from '../utils/logger';
+import * as authService from '../services/authService';
+import { apiResponse } from '../@types/apiReponse';
 
 /**
  * Makes authentication call to google statergy
@@ -18,8 +18,8 @@ const googleAuthLogin = (
   next: NextFunction
 ): any => {
   const redirectURL = req.query.redirectURL as string;
-  return passport.authenticate("google", {
-    scope: ["email", "profile"],
+  return passport.authenticate('google', {
+    scope: ['email', 'profile'],
     state: redirectURL,
   })(req, res, next);
 };
@@ -38,20 +38,20 @@ const googleAuthCallback = (
 ): void => {
   const redirectURL = req.query.state as string;
 
-  let rCalUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
+  let rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
   try {
     rCalUiUrl = new URL(redirectURL);
   } catch (error) {
-    logger.error("Invalid redirect URL provided");
+    logger.error('Invalid redirect URL provided');
     logger.error(error);
   }
 
   try {
-    return passport.authenticate("google", {}, async (err, _, user) => {
+    return passport.authenticate('google', {}, async (err, _, user) => {
       if (err) {
         logger.error(err);
-        return res.boom(Boom.unauthorized("User cannot be authenticated"));
+        return res.boom(Boom.unauthorized('User cannot be authenticated'));
       }
 
       const userData = await authService.loginOrSignupWithGoogle(user._json);
@@ -59,14 +59,14 @@ const googleAuthCallback = (
       const token = authService.generateAuthToken({ userId: userData?.id });
 
       // respond with a cookie
-      res.cookie(config.get("userAccessToken.cookieName"), token, {
+      res.cookie(config.get('userAccessToken.cookieName'), token, {
         domain: rCalUiUrl.hostname,
         expires: new Date(
-          Date.now() + config.get("userAccessToken.ttl") * 1000
+          Date.now() + config.get('userAccessToken.ttl') * 1000
         ),
         httpOnly: true,
         secure: true,
-        sameSite: "lax",
+        sameSite: 'lax',
       });
 
       return res.redirect(rCalUiUrl.href);
@@ -84,26 +84,26 @@ const microsoftAuthCallback = (
   res: Response,
   next: NextFunction
 ): void => {
-  const rCalUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
+  const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
   try {
-    return passport.authenticate("microsoft", {}, async (err, _, user) => {
+    return passport.authenticate('microsoft', {}, async (err, _, user) => {
       if (err) {
         logger.error(err);
-        return res.boom(Boom.unauthorized("User cannot be authenticated"));
+        return res.boom(Boom.unauthorized('User cannot be authenticated'));
       }
       const userData = await authService.loginOrSignupWithMicrosoft(user._json);
       const token = authService.generateAuthToken({ userId: userData?.id });
 
       // respond with a cookie
-      res.cookie(config.get("userAccessToken.cookieName"), token, {
+      res.cookie(config.get('userAccessToken.cookieName'), token, {
         domain: rCalUiUrl.hostname,
         expires: new Date(
-          Date.now() + config.get("userAccessToken.ttl") * 1000
+          Date.now() + config.get('userAccessToken.ttl') * 1000
         ),
         httpOnly: true,
         secure: true,
-        sameSite: "lax",
+        sameSite: 'lax',
       });
 
       return res.redirect(rCalUiUrl.href);
@@ -118,17 +118,17 @@ const microsoftAuthCallback = (
 
 // Logs out the user from the device
 const logOut = (_req: Request, res: Response): Response => {
-  const cookieName = config.get("userAccessToken.cookieName");
-  const rdsUiUrl = new URL(config.get("services.rCalUi.baseUrl"));
+  const cookieName = config.get('userAccessToken.cookieName');
+  const rdsUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
   res.clearCookie(cookieName, {
     domain: rdsUiUrl.hostname,
     httpOnly: true,
     secure: true,
-    sameSite: "lax",
+    sameSite: 'lax',
   });
   const response: apiResponse<null> = {
-    message: "SignOut successful",
+    message: 'SignOut successful',
   };
 
   return res.status(200).json(response);
