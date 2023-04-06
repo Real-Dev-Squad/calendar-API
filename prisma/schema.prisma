@@ -95,12 +95,20 @@ enum RecurringFrequency {
   HOURLY
 }
 
+enum EventAcknowledgements {
+  AWAITING
+  ACCEPTED
+  DECLINED
+  TENTATIVE
+}
+
 model Attendees {
-  id         Int   @id @default(autoincrement())
-  eventId    Int
-  event      Event @relation(fields: [eventId], references: [id])
-  attendeeId Int
-  attendee   Users @relation(fields: [attendeeId], references: [id])
+  id              Int                   @id @default(autoincrement())
+  eventId         Int
+  event           Event                 @relation(fields: [eventId], references: [id])
+  attendeeId      Int
+  attendee        Users                 @relation(fields: [attendeeId], references: [id])
+  acknowledgement EventAcknowledgements @default(AWAITING)
 }
 
 enum CalendarType {

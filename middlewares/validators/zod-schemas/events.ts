@@ -24,6 +24,16 @@ const getEventSchema = z.object({
   }),
 });
 
+const getAcknowledgementSchema = z.object({
+  params: z.object({
+    eventId: z.preprocess((a) => Number(a), z.number().positive()),
+    attendeeId: z.preprocess((a) => Number(a), z.number().positive()),
+  }),
+  body: z.object({
+    status: z.enum(['ACCEPTED', 'DECLINED', 'TENTATIVE']),
+  }),
+});
+
 const getCalenderEventSchema = z.object({
   params: z.object({
     calendarId: z.preprocess((a) => Number(a), z.number().positive()),
@@ -34,4 +44,9 @@ const getCalenderEventSchema = z.object({
   }),
 });
 
-export { postEventSchema, getEventSchema, getCalenderEventSchema };
+export {
+  postEventSchema,
+  getEventSchema,
+  getCalenderEventSchema,
+  getAcknowledgementSchema,
+};
