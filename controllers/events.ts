@@ -154,7 +154,7 @@ const getAcknowledgementStatus = async (
     },
   });
 
-  if (updatedData && updatedData.acknowledgement === status) {
+  if (updatedData.acknowledgement === status) {
     return res.json({ message: 'Acknowledgement status updated' });
   } else {
     return res.boom(Boom.internal('Something went wrong'));
