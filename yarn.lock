@@ -415,13 +415,6 @@
     "@types/connect" "*"
     "@types/node" "*"
 
-"@types/chai-http@^4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@types/chai-http/-/chai-http-4.2.0.tgz#223c9a3e7ce664767df3820501a91283382d756f"
-  integrity sha512-yb8+55cAuiVB7/yfnHIME5Ppw0LMUE6QFbuBFk5LewleI5pvYvtoXIEUAst3z3m0wZ2hLp1XeqllzffOSJSQuA==
-  dependencies:
-    chai-http "*"
-
 "@types/chai@4", "@types/chai@^4.3.4":
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.3.4.tgz#e913e8175db8307d78b4e8fa690408ba6b65dee4"
@@ -457,13 +450,6 @@
   integrity sha512-RG8AStHlUiV5ysZQKq97copd2UmVYw3/pRMLefISZ3S1hK104Cwm7iLQ3fTKx+lsUH2CE8FlLaYeEA2LSeqYUA==
   dependencies:
     "@types/node" "*"
-
-"@types/date-fns@^2.6.0":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@types/date-fns/-/date-fns-2.6.0.tgz#b062ca46562002909be0c63a6467ed173136acc1"
-  integrity sha512-9DSw2ZRzV0Tmpa6PHHJbMcZn79HHus+BBBohcOaDzkK/G3zMjDUDYjJIWBFLbkh+1+/IOS0A59BpQfdr37hASg==
-  dependencies:
-    date-fns "*"
 
 "@types/express-serve-static-core@^4.17.31":
   version "4.17.31"
@@ -522,13 +508,6 @@
   integrity sha512-BiLcfVqGBZCyNCnCH3F4o2GmDLrpy0HeBVnNlyZG4fo88ZiE9SoiBe3C+2ezuwbjlEyT+PDZ17//TAlRxAn75Q==
   dependencies:
     "@types/node" "*"
-
-"@types/node-cache@^4.2.5":
-  version "4.2.5"
-  resolved "https://registry.yarnpkg.com/@types/node-cache/-/node-cache-4.2.5.tgz#dac6be8bf8f486db4eef66f52f7bb9e90b65d2c1"
-  integrity sha512-faK2Owokboz53g8ooq2dw3iDJ6/HMTCIa2RvMte5WMTiABy+wA558K+iuyRtlR67Un5q9gEKysSDtqZYbSa0Pg==
-  dependencies:
-    node-cache "*"
 
 "@types/node@*", "@types/node@^18.11.3":
   version "18.11.17"
@@ -697,6 +676,11 @@
   dependencies:
     "@typescript-eslint/types" "5.47.0"
     eslint-visitor-keys "^3.3.0"
+
+"@vvo/tzdb@^6.105.0":
+  version "6.105.0"
+  resolved "https://registry.yarnpkg.com/@vvo/tzdb/-/tzdb-6.105.0.tgz#0f65a7bdf10ce5b41b94e45826e71972cbc2abc5"
+  integrity sha512-um6mCvLccZFlHqDlU1CDSdK/6L9K/hl3XsCKv6FpBGQRXoDrcUXk0E4TXoHjtdY0zkaDjBmroHt0ktJYJpvrNg==
 
 abbrev@1:
   version "1.1.1"
@@ -1008,7 +992,7 @@ caniuse-lite@^1.0.30001400:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001441.tgz#987437b266260b640a23cd18fbddb509d7f69f3e"
   integrity sha512-OyxRR4Vof59I3yGWXws6i908EtGbMzVUi3ganaZQHmydk1iwDhRnvaPG2WaR0KcqrDFKrxVZHULT396LEPhXfg==
 
-chai-http@*, chai-http@^4.3.0:
+chai-http@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/chai-http/-/chai-http-4.3.0.tgz#3c37c675c1f4fe685185a307e345de7599337c1a"
   integrity sha512-zFTxlN7HLMv+7+SPXZdkd5wUlK+KxH6Q7bIEMiEx0FK3zuuMqL7cwICAQ0V1+yYRozBburYuxN1qZstgHpFZQg==
@@ -1277,7 +1261,7 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.1, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-date-fns@*, date-fns@^2.29.1, date-fns@^2.29.3:
+date-fns@^2.29.1, date-fns@^2.29.3:
   version "2.29.3"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.29.3.tgz#27402d2fc67eb442b511b70bbdf98e6411cd68a8"
   integrity sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==
@@ -2952,7 +2936,7 @@ nock@^13.2.9:
     lodash "^4.17.21"
     propagate "^2.0.0"
 
-node-cache@*, node-cache@^5.1.2:
+node-cache@^5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/node-cache/-/node-cache-5.1.2.tgz#f264dc2ccad0a780e76253a694e9fd0ed19c398d"
   integrity sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==
