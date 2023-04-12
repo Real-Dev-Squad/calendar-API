@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 import logger from '../utils/logger';
 import * as authService from '../services/authService';
 import { apiResponse } from '../@types/apiReponse';
+import { MicrosoftOAuthJson } from '../@types/providers';
 
 /**
  * Makes authentication call to google statergy
@@ -87,27 +88,33 @@ const microsoftAuthCallback = (
   const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
   try {
-    return passport.authenticate('microsoft', {}, async (err, _, user) => {
-      if (err) {
-        logger.error(err);
-        return res.boom(Boom.unauthorized('User cannot be authenticated'));
+    return passport.authenticate(
+      'microsoft',
+      {},
+      async (err: any, _: any, user: { _json: MicrosoftOAuthJson }) => {
+        if (err) {
+          logger.error(err);
+          return res.boom(Boom.unauthorized('User cannot be authenticated'));
+        }
+        const userData = await authService.loginOrSignupWithMicrosoft(
+          user._json
+        );
+        const token = authService.generateAuthToken({ userId: userData?.id });
+
+        // respond with a cookie
+        res.cookie(config.get('userAccessToken.cookieName'), token, {
+          domain: rCalUiUrl.hostname,
+          expires: new Date(
+            Date.now() + config.get('userAccessToken.ttl') * 1000
+          ),
+          httpOnly: true,
+          secure: true,
+          sameSite: 'lax',
+        });
+
+        return res.redirect(rCalUiUrl.href);
       }
-      const userData = await authService.loginOrSignupWithMicrosoft(user._json);
-      const token = authService.generateAuthToken({ userId: userData?.id });
-
-      // respond with a cookie
-      res.cookie(config.get('userAccessToken.cookieName'), token, {
-        domain: rCalUiUrl.hostname,
-        expires: new Date(
-          Date.now() + config.get('userAccessToken.ttl') * 1000
-        ),
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-      });
-
-      return res.redirect(rCalUiUrl.href);
-    })(req, res, next);
+    )(req, res, next);
   } catch (err: any) {
     logger.error(err);
 

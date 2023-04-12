@@ -1,8 +1,10 @@
+import { z } from 'zod';
 import { Event, EventType } from '@prisma/client';
 import { Request, Response } from 'express';
 import Boom from '@hapi/boom';
 import prisma from '../prisma/prisma';
 import { findEvent, findEventFromCalendar } from '../services/eventsService';
+import { getAcknowledgementSchema } from '../middlewares/validators/zod-schemas/events';
 
 /**
  * Route used to post event
@@ -99,7 +101,10 @@ const getEvents = async (req: Request, res: Response): Promise<any> => {
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
  */
-const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
+const getCalendarEvents = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const { calendarId } = req.params;
     const { startTime, endTime } = req.query;
@@ -120,4 +125,40 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { postEvent, getEvents, getCalendarEvents };
+type TAcknowledgementStatusReq = z.infer<typeof getAcknowledgementSchema>;
+
+const getAcknowledgementStatus = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { eventId, attendeeId } = req.params;
+  const { status } = req.body as TAcknowledgementStatusReq['body'];
+
+  const attendeeData = await prisma.attendees.findFirst({
+    where: {
+      eventId: Number(eventId),
+      attendeeId: Number(attendeeId),
+    },
+  });
+
+  if (attendeeData === null) {
+    return res.boom(Boom.badRequest('Attendee not found'));
+  }
+
+  const updatedData = await prisma.attendees.update({
+    where: {
+      id: attendeeData.id,
+    },
+    data: {
+      acknowledgement: status,
+    },
+  });
+
+  if (updatedData.acknowledgement === status) {
+    return res.json({ message: 'Acknowledgement status updated' });
+  } else {
+    return res.boom(Boom.internal('Something went wrong'));
+  }
+};
+
+export { postEvent, getEvents, getCalendarEvents, getAcknowledgementStatus };

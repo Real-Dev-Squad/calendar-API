@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { EventAcknowledgements } from '@prisma/client';
 
 const EVENT_TYPE = ['event'] as const;
 
@@ -24,6 +25,22 @@ const getEventSchema = z.object({
   }),
 });
 
+const UPDATED_ACKNOWLEDGEMENT_TYPES = [
+  EventAcknowledgements.ACCEPTED,
+  EventAcknowledgements.DECLINED,
+  EventAcknowledgements.TENTATIVE,
+] as const;
+
+const getAcknowledgementSchema = z.object({
+  params: z.object({
+    eventId: z.preprocess((a) => Number(a), z.number().positive()),
+    attendeeId: z.preprocess((a) => Number(a), z.number().positive()),
+  }),
+  body: z.object({
+    status: z.enum(UPDATED_ACKNOWLEDGEMENT_TYPES),
+  }),
+});
+
 const getCalenderEventSchema = z.object({
   params: z.object({
     calendarId: z.preprocess((a) => Number(a), z.number().positive()),
@@ -34,4 +51,9 @@ const getCalenderEventSchema = z.object({
   }),
 });
 
-export { postEventSchema, getEventSchema, getCalenderEventSchema };
+export {
+  postEventSchema,
+  getEventSchema,
+  getCalenderEventSchema,
+  getAcknowledgementSchema,
+};
