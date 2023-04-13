@@ -7,11 +7,30 @@ const postEventSchema = z.object({
     .object({
       name: z.string().min(1),
       description: z.string().optional(),
-      eventType: z.enum(EVENT_TYPE),
+      eventType: z.enum(EVENT_TYPE).optional(),
       location: z.string().optional(),
       startTime: z.number(),
       endTime: z.number(),
       calendarId: z.number(),
+      attendees: z.array(z.string()).optional(),
+      // TODO: Recuring event to be added
+    })
+    .strict(),
+});
+
+const patchEventSchema = z.object({
+  params: z.object({
+    eventId: z.preprocess((a) => Number(a), z.number().positive()),
+  }),
+  body: z
+    .object({
+      name: z.string().optional(),
+      description: z.string().optional(),
+      eventType: z.enum(EVENT_TYPE).optional(),
+      location: z.string().optional(),
+      startTime: z.number().optional(),
+      endTime: z.number().optional(),
+      calendarId: z.number().optional(),
       attendees: z.array(z.string()).optional(),
       // TODO: Recuring event to be added
     })
@@ -34,4 +53,9 @@ const getCalenderEventSchema = z.object({
   }),
 });
 
-export { postEventSchema, getEventSchema, getCalenderEventSchema };
+export {
+  postEventSchema,
+  patchEventSchema,
+  getEventSchema,
+  getCalenderEventSchema,
+};

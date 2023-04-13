@@ -1,4 +1,4 @@
-import { Event, EventType } from '@prisma/client';
+import { Event } from '@prisma/client';
 import { Request, Response } from 'express';
 import Boom from '@hapi/boom';
 import prisma from '../prisma/prisma';
@@ -18,13 +18,6 @@ const postEvent = async (
     const userId = req.userData.id;
     const eventData = req.body;
     const attendeesList = eventData.attendees ?? [];
-
-    // Get event id from event name
-    const eventTypeData: EventType = await prisma.eventType.findFirstOrThrow({
-      where: {
-        name: eventData.eventType,
-      },
-    });
 
     // Get attendee ids from email
     const attendeeId = await prisma.users.findMany({
@@ -50,7 +43,7 @@ const postEvent = async (
       endTime: new Date(eventData.endTime),
       ownerId: userId,
       calendarId: eventData.calendarId,
-      eventTypeId: eventTypeData.id,
+      eventTypeId: 1,
       Attendees: {
         createMany: { data: allAttendeesData },
       },
@@ -67,6 +60,59 @@ const postEvent = async (
     return res.status(200).send({ message: 'Event created', data: respEvent });
   } catch (err: any) {
     logger.error('Error while creating event', { err });
+    return res.boom(Boom.badImplementation());
+  }
+};
+
+/**
+ * Route used to patch event
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ */
+const patchEvent = async (
+  req: Request,
+  res: Response
+): Promise<Response<any, Record<string, any>>> => {
+  try {
+    const { eventId } = req.params;
+    const userId = req.userData.id;
+    const eventData = req.body;
+    const start = eventData.startTime
+      ? new Date(eventData.startTime)
+      : undefined;
+    const end = eventData.endTime ? new Date(eventData.endTime) : undefined;
+
+    const eventObject: Event | any = {
+      name: eventData.name,
+      description: eventData.description,
+      location: eventData.location,
+      startTime: start,
+      endTime: end,
+      ownerId: userId,
+      calendarId: eventData.calendarId,
+      // @prakash :: Event Type: Event. Id: 1
+      eventTypeId: 1,
+      // TODO: Need to fix updating attendees list
+      // Attendees: {
+      //   createMany: { data: allAttendeesData },
+      // },
+    };
+    // Prepare child recurring events
+
+    const event = await prisma.event.update({
+      where: {
+        id: Number(eventId),
+      },
+      data: eventObject,
+    });
+    logger.info('Event updated');
+
+    const respEvent: Event = await findEvent(event.id);
+
+    return res.status(200).send({ message: 'Event updated', data: respEvent });
+  } catch (err: any) {
+    logger.error('Error while updating event', { err });
     return res.boom(Boom.badImplementation());
   }
 };
@@ -120,4 +166,4 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { postEvent, getEvents, getCalendarEvents };
+export { postEvent, patchEvent, getEvents, getCalendarEvents };
