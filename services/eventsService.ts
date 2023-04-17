@@ -17,12 +17,7 @@ const findEvent = async (eventId: number): Promise<any> => {
               },
             },
           },
-          take: 1,
-        },
-        EventType: {
-          select: {
-            name: true,
-          },
+          // take: 1,
         },
       },
     });
