@@ -60,7 +60,7 @@ const googleAuthCallback = (
 
       // respond with a cookie
       res.cookie(config.get('userAccessToken.cookieName'), token, {
-        domain: rCalUiUrl.hostname,
+        domain: config.get('userAccessToken.cookieDomain'),
         expires: new Date(
           Date.now() + config.get('userAccessToken.ttl') * 1000
         ),
@@ -97,7 +97,7 @@ const microsoftAuthCallback = (
 
       // respond with a cookie
       res.cookie(config.get('userAccessToken.cookieName'), token, {
-        domain: rCalUiUrl.hostname,
+        domain: config.get('userAccessToken.cookieDomain'),
         expires: new Date(
           Date.now() + config.get('userAccessToken.ttl') * 1000
         ),
@@ -119,10 +119,9 @@ const microsoftAuthCallback = (
 // Logs out the user from the device
 const logOut = (_req: Request, res: Response): Response => {
   const cookieName = config.get('userAccessToken.cookieName');
-  const rdsUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
   res.clearCookie(cookieName, {
-    domain: rdsUiUrl.hostname,
+    domain: config.get('userAccessToken.cookieDomain'),
     httpOnly: true,
     secure: true,
     sameSite: 'lax',

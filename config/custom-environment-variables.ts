@@ -25,6 +25,7 @@ module.exports = {
 
   userAccessToken: {
     cookieName: 'USER_TOKEN_COOKIE_NAME',
+    cookieDomain: 'USER_TOKEN_COOKIE_DOMAIN',
     ttl: {
       __name: 'USER_TOKEN_TTL',
       __format: 'number',
