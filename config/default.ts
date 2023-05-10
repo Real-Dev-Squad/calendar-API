@@ -19,6 +19,7 @@ export default {
 
   userAccessToken: {
     cookieName: `session-${String(NODE_ENV)}`,
+    cookieDomain: '<cookie-domain>',
     ttl: 30 * 24 * 60 * 60, // in seconds
     refreshTtl: 180 * 24 * 60 * 60, // in seconds
     publicKey:
