@@ -14,7 +14,7 @@ export default {
   logs: {
     enableFileLogs: false,
     enableConsoleLogs: true,
-    // [DEFAULT, PRETTY, CUSTOM]
+    // [DEFAULT, PRETTY, SIMPLE, CUSTOM]
     formatType: 'DEFAULT',
     logLevel: 'http',
   },

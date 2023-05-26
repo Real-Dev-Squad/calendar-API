@@ -1,6 +1,6 @@
 import winston, { format } from 'winston';
 import config from 'config';
-const { combine, timestamp, prettyPrint, errors, printf } = format;
+const { combine, timestamp, prettyPrint, errors, printf, simple } = format;
 
 // define the custom settings for each transport (file, console)
 const options = {
@@ -24,6 +24,7 @@ const options = {
 
 const formatOptions = {
   PRETTY: combine(...[timestamp(), prettyPrint()]),
+  SIMPLE: combine(...[simple()]),
   CUSTOM: combine(
     ...[
       timestamp(), // Add a timestamp to each log message
@@ -39,6 +40,7 @@ const formatOptions = {
 enum FormatType {
   DEFAULT = 'DEFAULT',
   PRETTY = 'PRETTY',
+  SIMPLE = 'SIMPLE',
   CUSTOM = 'CUSTOM',
 }
 const formatType: FormatType = config.get('logs.formatType');
