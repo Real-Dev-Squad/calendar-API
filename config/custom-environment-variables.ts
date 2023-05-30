@@ -20,6 +20,7 @@ module.exports = {
       __name: 'LOGS_ENABLE_CONSOLE_LOGS',
       __format: 'boolean',
     },
+    formateType: 'LOGS_FORMAT_TYPE',
     logLevel: 'LOGS_LOG_LEVEL',
   },
 

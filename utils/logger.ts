@@ -1,5 +1,6 @@
-import winston from 'winston';
+import winston, { format } from 'winston';
 import config from 'config';
+const { combine, timestamp, prettyPrint, errors, printf, simple } = format;
 
 // define the custom settings for each transport (file, console)
 const options = {
@@ -21,6 +22,29 @@ const options = {
   },
 };
 
+const formatOptions = {
+  PRETTY: combine(...[timestamp(), prettyPrint()]),
+  SIMPLE: combine(...[simple()]),
+  CUSTOM: combine(
+    ...[
+      timestamp(), // Add a timestamp to each log message
+      errors({ stack: true }), // Display stack traces for errors
+      printf(({ level, message, timestamp }) => {
+        return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+      }),
+    ]
+  ),
+  DEFAULT: undefined,
+};
+
+enum FormatType {
+  DEFAULT = 'DEFAULT',
+  PRETTY = 'PRETTY',
+  SIMPLE = 'SIMPLE',
+  CUSTOM = 'CUSTOM',
+}
+const formatType: FormatType = config.get('logs.formatType');
+
 // instantiate a new Winston Logger with the settings defined above
 // eslint-disable-line new-cap
 /* eslint new-cap: ["error", { "properties": false }] */
@@ -32,6 +56,7 @@ const logger: winston.Logger = winston.createLogger({
    *
    * Modifications to be made through environment variables defined in config files
    */
+  format: formatOptions[`${formatType}`],
   transports: [
     ...(config.get('logs.enableFileLogs') === true
       ? [new winston.transports.File(options.file)]
