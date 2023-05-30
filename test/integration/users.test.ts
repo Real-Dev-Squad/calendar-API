@@ -5,7 +5,6 @@ import { generateAuthToken } from '../../services/authService';
 const { expect } = chai;
 
 describe('Integration | Route | /users/self', function () {
-
   it('Get | /user/self | Error', function (done) {
     chai
       .request(app)
@@ -22,7 +21,7 @@ describe('Integration | Route | /users/self', function () {
       });
   });
 
-  it.skip('GET | /user/self | Success', function (done) {
+  it('GET | /user/self | Success', function (done) {
     const jwt = generateAuthToken({ userId: 12524395 });
     const cookieName = config.get('userAccessToken.cookieName');
     chai
@@ -34,6 +33,7 @@ describe('Integration | Route | /users/self', function () {
           return done(err);
         }
         expect(res).to.have.status(200);
+        return done();
       });
   });
 });
