@@ -1,3 +1,4 @@
+import { Calendar, Event } from '@prisma/client';
 import { eventWithAttendees } from '../@types/apiReponse';
 import prisma from '../prisma/prisma';
 
@@ -69,4 +70,25 @@ const findEventFromCalendar = async (
   }
 };
 
-export { findEvent, findEventFromCalendar };
+const findCalendarWithId = async (
+  calendarId: number
+): Promise<Calendar | null> => {
+  const calendarData = await prisma.calendar.findUnique({
+    where: { id: calendarId },
+  });
+  return calendarData;
+};
+
+const findEventWithId = async (eventId: number): Promise<Event | null> => {
+  const eventResponse = await prisma.event.findUnique({
+    where: { id: +eventId },
+  });
+  return eventResponse;
+};
+
+export {
+  findEvent,
+  findEventFromCalendar,
+  findCalendarWithId,
+  findEventWithId,
+};
