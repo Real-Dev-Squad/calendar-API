@@ -17,7 +17,7 @@ const calendarBelongsToUser = async (
 ): Promise<any | Response> => {
   try {
     const userId = req.userData.id;
-    const calendarId = req.body.calendarId;
+    const calendarId = +(req.params.calendarId || req.body.calendarId);
 
     const calendarData = await findCalendarWithId(calendarId);
 
