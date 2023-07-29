@@ -13,17 +13,40 @@ import {
   postEventSchema,
   patchEventSchema,
 } from '../middlewares/validators/zod-schemas/events';
+import {
+  calendarBelongsToUser,
+  eventBelongsToUser,
+} from '../middlewares/authorize';
 
 const router = Router();
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-router.post('/', authenticate, validate(postEventSchema), postEvent);
-router.patch('/:eventId', authenticate, validate(patchEventSchema), patchEvent);
-router.get('/:eventId', authenticate, validate(getEventSchema), getEvents);
+router.post(
+  '/',
+  authenticate,
+  validate(postEventSchema),
+  calendarBelongsToUser,
+  postEvent
+);
+router.patch(
+  '/:eventId',
+  authenticate,
+  validate(patchEventSchema),
+  eventBelongsToUser,
+  patchEvent
+);
+router.get(
+  '/:eventId',
+  authenticate,
+  validate(getEventSchema),
+  eventBelongsToUser,
+  getEvents
+);
 router.get(
   '/calendar/:calendarId',
   authenticate,
   validate(getCalenderEventSchema),
+  calendarBelongsToUser,
   getCalendarEvents
 );
 /* eslint-disable @typescript-eslint/no-misused-promises */
