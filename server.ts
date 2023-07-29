@@ -5,6 +5,7 @@ import app from './app';
 import { version } from './package.json';
 import ErrnoException = NodeJS.ErrnoException;
 import checkDatabaseConnection from './utils/prisma';
+import { env } from 'process';
 
 // Initialise globals
 global.config = config;
@@ -27,11 +28,12 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Checks if DB is connected
- */
-void checkDatabaseConnection();
-
+if (String(env.NODE_ENV) !== 'test') {
+  /**
+   * Checks if DB is connected
+   */
+  void checkDatabaseConnection();
+}
 /**
  * Event listener for HTTP server "error" event.
  */
