@@ -6,7 +6,7 @@ import * as authService from '../services/authService';
 import { apiResponse } from '../@types/apiReponse';
 import { Users } from '@prisma/client';
 
-const COOKIE_CALENDAR_ID = 'calendar_id';
+const COOKIE_CALENDAR_ID = 'calendar-id';
 const COOKIE_USERNAME = 'username';
 
 /**

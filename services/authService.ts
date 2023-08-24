@@ -76,35 +76,39 @@ const getUserData = async (
 const createNewUser = async (
   user: GoogleOAuthJson | MicrosoftOAuthJson
 ): Promise<{ user: Users; calendar: Calendar }> => {
-  let createdUser: Users | undefined;
-
+  let data!: {
+    email: string;
+    firstname: string;
+    lastname: string;
+    emailVerified: boolean;
+    googleProfileId?: string;
+    microsoftProfileId?: string;
+  };
   if ('email' in user) {
     logger.info(
       `User with email ${user.email} does not exist. Creating new account from Google`
     );
-    createdUser = await prisma.users.create({
-      data: {
-        email: user.email,
-        firstname: user.given_name,
-        lastname: user.family_name,
-        emailVerified: true,
-        googleProfileId: user?.sub,
-      },
-    });
+    data = {
+      email: user.email,
+      firstname: user.given_name,
+      lastname: user.family_name,
+      emailVerified: true,
+      googleProfileId: user?.sub,
+    };
   } else if ('mail' in user) {
     logger.info(
       `User with email ${user.mail} does not exist. Creating new account from Microsoft`
     );
-    createdUser = await prisma.users.create({
-      data: {
-        email: user.mail ?? user.userPrincipalName,
-        firstname: user.givenName,
-        lastname: user.surname,
-        emailVerified: true,
-        microsoftProfileId: user.id,
-      },
-    });
+    data = {
+      email: user.mail ?? user.userPrincipalName,
+      firstname: user.givenName,
+      lastname: user.surname,
+      emailVerified: true,
+      microsoftProfileId: user.id,
+    };
   }
+
+  const createdUser: Users | undefined = await prisma.users.create({ data });
 
   if (!createdUser) {
     throw new Error('Failed to create user');
