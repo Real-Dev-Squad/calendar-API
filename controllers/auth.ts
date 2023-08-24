@@ -6,8 +6,10 @@ import * as authService from '../services/authService';
 import { apiResponse } from '../@types/apiReponse';
 import { Users } from '@prisma/client';
 
-const COOKIE_CALENDAR_ID = 'calendar-id';
-const COOKIE_USERNAME = 'username';
+enum COOKIES_KEYS {
+  CALENDAR_ID = 'calendar-id',
+  USERNAME = 'username',
+}
 
 /**
  *
@@ -30,11 +32,11 @@ const setCookies = (
   const token = authService.generateAuthToken({ userId: user.id });
 
   res.cookie(config.get('userAccessToken.cookieName'), token, COOKIE_OPTIONS);
-  res.cookie(COOKIE_CALENDAR_ID, user.calendarId, {
+  res.cookie(COOKIES_KEYS.CALENDAR_ID, user.calendarId, {
     ...COOKIE_OPTIONS,
     httpOnly: false,
   });
-  res.cookie(COOKIE_USERNAME, user.username ?? '', {
+  res.cookie(COOKIES_KEYS.USERNAME, user.username ?? '', {
     ...COOKIE_OPTIONS,
     httpOnly: false,
   });
