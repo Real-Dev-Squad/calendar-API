@@ -77,11 +77,13 @@ const googleAuthCallback = (
 
   let rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
-  try {
-    rCalUiUrl = new URL(redirectURL);
-  } catch (error) {
-    logger.error('Invalid redirect URL provided');
-    logger.error(error);
+  if (redirectURL) {
+    try {
+      rCalUiUrl = new URL(redirectURL);
+    } catch (error) {
+      logger.error('Invalid redirect URL provided');
+      logger.error(error);
+    }
   }
 
   try {

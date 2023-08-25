@@ -47,24 +47,29 @@ const decodeAuthToken = (token: string): any => {
  */
 const getUserData = async (
   email: string
-): Promise<Users & { calendarId: number }> => {
-  const user = await prisma.users.findUniqueOrThrow({
-    where: {
-      email,
-    },
-    include: {
-      Calendar: {
-        where: {
-          isDeleted: false,
-          isPrimary: true,
-        },
-        select: {
-          id: true,
+): Promise<(Users & { calendarId: number }) | undefined> => {
+  try {
+    const user = await prisma.users.findUniqueOrThrow({
+      where: {
+        email,
+      },
+      include: {
+        Calendar: {
+          where: {
+            isDeleted: false,
+            isPrimary: true,
+          },
+          select: {
+            id: true,
+          },
         },
       },
-    },
-  });
-  return { ...user, calendarId: user.Calendar[0].id };
+    });
+    return { ...user, calendarId: user.Calendar[0].id };
+  } catch (error) {
+    logger.error('Could not find user', error);
+    return undefined;
+  }
 };
 
 /**
