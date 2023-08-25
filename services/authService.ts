@@ -67,7 +67,7 @@ const getUserData = async (
     });
     return { ...user, calendarId: user.Calendar[0].id };
   } catch (error) {
-    logger.error('Could not find user', error);
+    logger.info('Could not find user', error);
     return undefined;
   }
 };
@@ -116,6 +116,7 @@ const createNewUser = async (
   const createdUser: Users | undefined = await prisma.users.create({ data });
 
   if (!createdUser) {
+    logger.error(`Failed to create user.`);
     throw new Error('Failed to create user');
   }
 
