@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@hapi/boom": "^10.0.0",
-    "@prisma/client": "^4.5.0",
+    "@prisma/client": "^5.2.0",
     "@vvo/tzdb": "^6.105.0",
     "config": "^3.3.8",
     "cookie-parser": "~1.4.4",
@@ -39,7 +39,7 @@
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-microsoft": "^1.0.0",
-    "prisma": "^4.5.0",
+    "prisma": "^5.2.0",
     "winston": "3.8.2",
     "zod": "^3.19.1"
   },
