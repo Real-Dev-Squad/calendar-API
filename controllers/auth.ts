@@ -4,9 +4,46 @@ import { NextFunction, Request, Response } from 'express';
 import logger from '../utils/logger';
 import * as authService from '../services/authService';
 import { apiResponse } from '../@types/apiReponse';
+import { Users } from '@prisma/client';
+
+enum COOKIES_KEYS {
+  CALENDAR_ID = 'calendar-id',
+  USERNAME = 'username',
+}
 
 /**
- * Makes authentication call to google statergy
+ *
+ * Sets cookies for
+ * @param res {Object}
+ * @param user {Users & { calendarId: number }}
+ */
+const setCookies = (
+  res: Response,
+  user: Users & { calendarId: number }
+): void => {
+  const COOKIE_OPTIONS: any = {
+    domain: config.get('userAccessToken.cookieDomain'),
+    expires: new Date(Date.now() + config.get('userAccessToken.ttl') * 1000),
+    httpOnly: true,
+    secure: true,
+    sameSite: 'lax',
+  };
+
+  const token = authService.generateAuthToken({ userId: user.id });
+
+  res.cookie(config.get('userAccessToken.cookieName'), token, COOKIE_OPTIONS);
+  res.cookie(COOKIES_KEYS.CALENDAR_ID, user.calendarId, {
+    ...COOKIE_OPTIONS,
+    httpOnly: false,
+  });
+  res.cookie(COOKIES_KEYS.USERNAME, user.username ?? '', {
+    ...COOKIE_OPTIONS,
+    httpOnly: false,
+  });
+};
+
+/**
+ * Makes authentication call to google strategy
  *
  * @param req {Object} - Express request object
  * @param res {Object} - Express response object
@@ -40,11 +77,13 @@ const googleAuthCallback = (
 
   let rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
-  try {
-    rCalUiUrl = new URL(redirectURL);
-  } catch (error) {
-    logger.error('Invalid redirect URL provided');
-    logger.error(error);
+  if (redirectURL) {
+    try {
+      rCalUiUrl = new URL(redirectURL);
+    } catch (error) {
+      logger.error('Invalid redirect URL provided');
+      logger.error(error);
+    }
   }
 
   try {
@@ -54,20 +93,10 @@ const googleAuthCallback = (
         return res.boom(Boom.unauthorized('User cannot be authenticated'));
       }
 
-      const userData = await authService.loginOrSignupWithGoogle(user._json);
-
-      const token = authService.generateAuthToken({ userId: userData?.id });
+      const data = await authService.loginOrSignupWithGoogle(user._json);
 
       // respond with a cookie
-      res.cookie(config.get('userAccessToken.cookieName'), token, {
-        domain: config.get('userAccessToken.cookieDomain'),
-        expires: new Date(
-          Date.now() + config.get('userAccessToken.ttl') * 1000
-        ),
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-      });
+      setCookies(res, data);
 
       return res.redirect(rCalUiUrl.href);
     })(req, res, next);
@@ -92,19 +121,10 @@ const microsoftAuthCallback = (
         logger.error(err);
         return res.boom(Boom.unauthorized('User cannot be authenticated'));
       }
-      const userData = await authService.loginOrSignupWithMicrosoft(user._json);
-      const token = authService.generateAuthToken({ userId: userData?.id });
+      const data = await authService.loginOrSignupWithMicrosoft(user._json);
 
       // respond with a cookie
-      res.cookie(config.get('userAccessToken.cookieName'), token, {
-        domain: config.get('userAccessToken.cookieDomain'),
-        expires: new Date(
-          Date.now() + config.get('userAccessToken.ttl') * 1000
-        ),
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-      });
+      setCookies(res, data);
 
       return res.redirect(rCalUiUrl.href);
     })(req, res, next);
