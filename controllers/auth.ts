@@ -5,6 +5,7 @@ import logger from '../utils/logger';
 import * as authService from '../services/authService';
 import { apiResponse } from '../@types/apiReponse';
 import { Users } from '@prisma/client';
+import { MicrosoftOAuthJson } from '../@types/providers';
 
 enum COOKIES_KEYS {
   CALENDAR_ID = 'calendar-id',
@@ -116,18 +117,22 @@ const microsoftAuthCallback = (
   const rCalUiUrl = new URL(config.get('services.rCalUi.baseUrl'));
 
   try {
-    return passport.authenticate('microsoft', {}, async (err, _, user) => {
-      if (err) {
-        logger.error(err);
-        return res.boom(Boom.unauthorized('User cannot be authenticated'));
+    return passport.authenticate(
+      'microsoft',
+      {},
+      async (err: any, _: any, user: { _json: MicrosoftOAuthJson }) => {
+        if (err) {
+          logger.error(err);
+          return res.boom(Boom.unauthorized('User cannot be authenticated'));
+        }
+        const data = await authService.loginOrSignupWithMicrosoft(user._json);
+
+        // respond with a cookie
+        setCookies(res, data);
+
+        return res.redirect(rCalUiUrl.href);
       }
-      const data = await authService.loginOrSignupWithMicrosoft(user._json);
-
-      // respond with a cookie
-      setCookies(res, data);
-
-      return res.redirect(rCalUiUrl.href);
-    })(req, res, next);
+    )(req, res, next);
   } catch (err: any) {
     logger.error(err);
 
