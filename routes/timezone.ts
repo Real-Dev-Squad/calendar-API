@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import health from '../controllers/health';
+import timezone from '../controllers/timezone';
 
 const router = Router();
 
-router.get('/', health);
+router.get('/', timezone);
 
 export default router;

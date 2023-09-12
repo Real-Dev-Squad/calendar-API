@@ -5,7 +5,13 @@
 
 export default {
   logs: {
-    enableFileLogs: true,
-    enableConsoleLogs: false,
+    enableFileLogs: false,
+    enableConsoleLogs: true,
+  },
+
+  services: {
+    rCalUi: {
+      baseUrl: 'https://rds-website-calendar.fly.dev',
+    },
   },
 };

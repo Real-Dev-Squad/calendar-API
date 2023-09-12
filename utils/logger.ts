@@ -1,10 +1,12 @@
-import winston from "winston";
+import winston, { format } from 'winston';
+import config from 'config';
+const { combine, timestamp, prettyPrint, errors, printf, simple } = format;
 
 // define the custom settings for each transport (file, console)
 const options = {
   file: {
-    level: "info",
-    filename: "logs/app.log",
+    level: String(config.get('logs.logLevel')),
+    filename: 'logs/app.log',
     handleExceptions: true,
     json: true,
     maxsize: 5242880, // 5MB
@@ -12,13 +14,36 @@ const options = {
     colorize: false,
   },
   console: {
-    level: "info",
+    level: String(config.get('logs.logLevel')),
     handleExceptions: true,
     json: false,
     colorize: true,
-    silent: process.env.NODE_ENV === "test", // Disable logs in test env
+    silent: process.env.NODE_ENV === 'test', // Disable logs in test env
   },
 };
+
+const formatOptions = {
+  PRETTY: combine(...[timestamp(), prettyPrint()]),
+  SIMPLE: combine(...[simple()]),
+  CUSTOM: combine(
+    ...[
+      timestamp(), // Add a timestamp to each log message
+      errors({ stack: true }), // Display stack traces for errors
+      printf(({ level, message, timestamp }) => {
+        return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+      }),
+    ]
+  ),
+  DEFAULT: undefined,
+};
+
+enum FormatType {
+  DEFAULT = 'DEFAULT',
+  PRETTY = 'PRETTY',
+  SIMPLE = 'SIMPLE',
+  CUSTOM = 'CUSTOM',
+}
+const formatType: FormatType = config.get('logs.formatType');
 
 // instantiate a new Winston Logger with the settings defined above
 // eslint-disable-line new-cap
@@ -31,11 +56,12 @@ const logger: winston.Logger = winston.createLogger({
    *
    * Modifications to be made through environment variables defined in config files
    */
+  format: formatOptions[`${formatType}`],
   transports: [
-    ...(config.get("logs.enableFileLogs") === true
+    ...(config.get('logs.enableFileLogs') === true
       ? [new winston.transports.File(options.file)]
       : []),
-    ...(config.get("logs.enableConsoleLogs") === true
+    ...(config.get('logs.enableConsoleLogs') === true
       ? [new winston.transports.Console(options.console)]
       : []),
   ],

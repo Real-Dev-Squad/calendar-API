@@ -7,36 +7,45 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "standard-with-typescript",
-    "plugin:mocha/recommended",
-    "plugin:security/recommended",
-    "prettier",
+    'standard-with-typescript',
+    'plugin:mocha/recommended',
+    'plugin:security/recommended',
+    'prettier',
   ],
-  plugins: ["mocha", "security", "prettier"],
-  overrides: [],
+  plugins: ['mocha', 'security', 'prettier'],
+  overrides: [
+    {
+      files: ['test/**/*.test.ts'],
+      rules: {
+        '@typescript-eslint/no-floating-promises': 'off',
+      },
+    },
+  ],
   globals: {
-    config: "readonly", // Add globals as 'readonly' or 'writable' as applicable
-    logger: "readonly",
+    config: 'readonly', // Add globals as 'readonly' or 'writable' as applicable
+    logger: 'readonly',
   },
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
-    project: ["./tsconfig.json"],
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json'],
   },
-  ignorePatterns: ["dist/*"],
+  ignorePatterns: ['dist/*'],
   rules: {
     // Custom eslint rules
-    "no-trailing-spaces": "error",
-    "consistent-return": "error",
-    "no-console": "error",
+    'no-trailing-spaces': 'error',
+    'consistent-return': 'error',
+    'no-console': 'error',
 
     // Custom mocha rules
-    "mocha/no-skipped-tests": "error",
-    "mocha/no-exclusive-tests": "error",
+    'mocha/no-skipped-tests': 'error',
+    'mocha/no-exclusive-tests': 'error',
 
     // Prettier rules
-    "prettier/prettier": "error",
+    'prettier/prettier': 'error',
 
     // @todo: Remove these temporarily allowed rules below once the issues are resolved
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/restrict-template-expressions': 'off',
   },
 };

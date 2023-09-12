@@ -1,7 +1,9 @@
-import express, { NextFunction, Request, Response } from "express";
-import createError from "http-errors";
-import AppMiddlewares from "./middlewares";
-import indexRouter from "./routes/index";
+import express, { NextFunction, Request, Response } from 'express';
+import createError from 'http-errors';
+import AppMiddlewares from './middlewares';
+import indexRouter from './routes/index';
+import health from './controllers/health';
+import Boom from '@hapi/boom';
 
 // Initialise express
 const app = express();
@@ -10,7 +12,8 @@ const app = express();
 AppMiddlewares(app);
 
 // Add routes
-app.use("/api/v1", indexRouter);
+app.use('/api/v1', indexRouter);
+app.get('/', health);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, _res: Response, next: NextFunction) {
@@ -27,10 +30,12 @@ app.use(function (err: any, req: Request, res: Response, _next: NextFunction) {
 
   // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
   const statusCode: number = err.status || 500;
-  res.boom.boomify(err, {
-    statusCode,
-    message: err.message,
-  });
+  return res.boom(
+    Boom.boomify(err, {
+      statusCode,
+      message: err.message,
+    })
+  );
 });
 
 export default app;

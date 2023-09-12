@@ -1,26 +1,18 @@
-/**
- * Initialise globals
- */
-import config from "config";
-global.config = config;
+import config from 'config';
+import logger from './utils/logger';
+import * as http from 'http';
+import app from './app';
+import { version } from './package.json';
+import ErrnoException = NodeJS.ErrnoException;
+import checkDatabaseConnection from './utils/prisma';
+import { env } from 'process';
 
-import logger from "./utils/logger";
+// Initialise globals
+global.config = config;
 global.logger = logger;
 
-// logger.info(`Initialising newrelic with app name:: ${config.get("integrations.newrelic.appName")}`);
-// Initialise newrelic
-// require("newrelic");
-
-/**
- * Module dependencies.
- */
-import * as http from "http";
-import app from "./app";
-import ErrnoException = NodeJS.ErrnoException;
-
-
-const port: number = config.get("port");
-app.set("port", port);
+const port: number = config.get('port');
+app.set('port', port);
 
 /**
  * Create HTTP server.
@@ -33,15 +25,21 @@ const server = http.createServer(app);
  */
 
 server.listen(port);
-server.on("error", onError);
-server.on("listening", onListening);
+server.on('error', onError);
+server.on('listening', onListening);
 
+if (String(env.NODE_ENV) !== 'test') {
+  /**
+   * Checks if DB is connected
+   */
+  void checkDatabaseConnection();
+}
 /**
  * Event listener for HTTP server "error" event.
  */
 
 function onError(error: ErrnoException): ErrnoException {
-  if (error.syscall !== "listen") {
+  if (error.syscall !== 'listen') {
     throw error;
   }
 
@@ -49,14 +47,14 @@ function onError(error: ErrnoException): ErrnoException {
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case "EACCES":
-      logger.error(bind + " requires elevated privileges");
+    case 'EACCES':
+      logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       // eslint-disable-next-line no-unreachable
       break;
 
-    case "EADDRINUSE":
-      logger.error(bind + " is already in use");
+    case 'EADDRINUSE':
+      logger.error(bind + ' is already in use');
       process.exit(1);
       // eslint-disable-next-line no-unreachable
       break;
@@ -72,7 +70,10 @@ function onError(error: ErrnoException): ErrnoException {
 
 function onListening(): void {
   logger.info(
-    `Express API running on port:${port} with environment:${process.env.NODE_ENV}`
+    `Express API running on port:${port} with environment:${String(
+      process.env.NODE_ENV
+    )}`,
+    { version }
   );
 }
 

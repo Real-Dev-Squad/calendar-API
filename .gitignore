@@ -125,4 +125,7 @@ dist
 .vscode
 
 # Local config file
-config/local.js
+config/local.*
+
+# Prisma Migrations
+prisma/migrations

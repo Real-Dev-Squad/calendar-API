@@ -1,13 +1,21 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import boom from "express-boom";
-import helmet from "helmet";
-import cors from "cors";
-import morganMiddleware from "../utils/httpLogger";
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import cors from 'cors';
+import config from 'config';
+import passport from 'passport';
+import * as dotenv from 'dotenv';
+import morganMiddleware from '../utils/httpLogger';
+import '../providers/google';
+import '../providers/microsoft';
+import errorResponse from './errorResponse';
 
 const middleware = (app: express.Application): void => {
-  // Middleware for sending error responses with express response object. To be required above all middlewares
-  app.use(boom());
+  // Load vars from .env to process.env
+  dotenv.config();
+
+  // Middleware for sending error responses. To be required above all middlewares
+  app.use(errorResponse);
 
   // Initialise logging middleware
   app.use(morganMiddleware);
@@ -31,11 +39,14 @@ const middleware = (app: express.Application): void => {
   // Configure CORS
   app.use(
     cors({
-      origin: config.get("cors.allowedOrigins"),
+      origin: config.get('cors.allowedOrigins'),
       credentials: true,
       optionsSuccessStatus: 200,
     })
   );
+
+  // Initialise authentication middleware
+  app.use(passport.initialize());
 };
 
 export default middleware;
