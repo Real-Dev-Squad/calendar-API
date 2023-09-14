@@ -20,6 +20,7 @@
     "format-check": "prettier --check ."
   },
   "dependencies": {
+    "@googleapis/oauth2": "^1.0.4",
     "@hapi/boom": "^10.0.0",
     "@prisma/client": "^5.2.0",
     "@vvo/tzdb": "^6.105.0",
@@ -30,7 +31,6 @@
     "debug": "~2.6.9",
     "dotenv": "^16.0.3",
     "express": "~4.16.1",
-    "googleapis": "^109.0.1",
     "helmet": "^6.0.0",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.0",

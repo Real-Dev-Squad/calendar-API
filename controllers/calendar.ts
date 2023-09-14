@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import Boom from '@hapi/boom';
-import { google } from 'googleapis';
+import { auth } from '@googleapis/oauth2';
 import config from 'config';
 import prisma from '../prisma/prisma';
 import {
@@ -13,8 +13,7 @@ import {
 const gcalClientId = config.get('providers.googleOauth20.clientId');
 const gcalClientSecret = config.get('providers.googleOauth20.clientSecret');
 const calApiUrl = config.get('services.calendarApi.baseUrl');
-
-const oauth2Client = new google.auth.OAuth2(
+const oauth2Client = new auth.OAuth2(
   String(gcalClientId),
   String(gcalClientSecret),
   `${String(calApiUrl)}/api/v1/calendar/google/callback`
