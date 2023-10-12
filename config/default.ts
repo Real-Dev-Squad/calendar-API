@@ -20,7 +20,7 @@ export default {
   },
 
   userAccessToken: {
-    cookieName: `rcal-session`,
+    cookieName: `rcal-session-${NODE_ENV}`,
     cookieDomain: '<cookie-domain>',
     ttl: 30 * 24 * 60 * 60, // in seconds
     refreshTtl: 180 * 24 * 60 * 60, // in seconds
