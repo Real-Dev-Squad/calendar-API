@@ -14,4 +14,8 @@ export default {
       baseUrl: 'https://rds-website-calendar.fly.dev',
     },
   },
+
+  userAccessToken: {
+    cookieName: `rcal-session-staging`,
+  },
 };
