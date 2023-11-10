@@ -69,6 +69,7 @@ model Event {
   EventType      EventType?       @relation(fields: [eventTypeId], references: [id])
   calendarId     Int
   Calendar       Calendar?        @relation(fields: [calendarId], references: [id])
+  isPrivate      Boolean          @default(true)
   isDeleted      Boolean          @default(false)
   RecurringEvent RecurringEvent[]
   Attendees      Attendees[]

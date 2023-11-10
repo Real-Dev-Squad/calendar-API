@@ -13,6 +13,7 @@ const postEventSchema = z.object({
       endTime: z.number(),
       calendarId: z.number(),
       attendees: z.array(z.string()).optional(),
+      isPrivate: z.boolean(),
       // TODO: Recuring event to be added
     })
     .strict(),
@@ -32,6 +33,7 @@ const patchEventSchema = z.object({
       endTime: z.number().optional(),
       calendarId: z.number().optional(),
       attendees: z.array(z.string()).optional(),
+      isPrivate: z.boolean(),
       // TODO: Recuring event to be added
     })
     .strict(),
@@ -53,9 +55,17 @@ const getCalenderEventSchema = z.object({
   }),
 });
 
+const getPublicEventSchema = z.object({
+  query: z.object({
+    startTime: z.preprocess((a) => Number(a), z.number().positive()).optional(),
+    endTime: z.preprocess((a) => Number(a), z.number().positive()).optional(),
+  }),
+});
+
 export {
   postEventSchema,
   patchEventSchema,
   getEventSchema,
   getCalenderEventSchema,
+  getPublicEventSchema,
 };

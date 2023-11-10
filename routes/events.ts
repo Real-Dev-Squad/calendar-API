@@ -4,6 +4,7 @@ import {
   getEvents,
   postEvent,
   patchEvent,
+  getPublicEvents,
 } from '../controllers/events';
 import authenticate from '../middlewares/authenticate';
 import { validate } from '../middlewares/validators/validator';
@@ -12,6 +13,7 @@ import {
   getEventSchema,
   postEventSchema,
   patchEventSchema,
+  getPublicEventSchema,
 } from '../middlewares/validators/zod-schemas/events';
 import {
   calendarBelongsToUser,
@@ -21,6 +23,7 @@ import {
 const router = Router();
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
+router.get('/', authenticate, validate(getPublicEventSchema), getPublicEvents);
 router.post(
   '/',
   authenticate,
@@ -49,6 +52,7 @@ router.get(
   calendarBelongsToUser,
   getCalendarEvents
 );
+
 /* eslint-disable @typescript-eslint/no-misused-promises */
 
 export default router;
