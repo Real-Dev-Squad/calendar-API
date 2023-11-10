@@ -2,7 +2,11 @@ import { Event } from '@prisma/client';
 import { Request, Response } from 'express';
 import Boom from '@hapi/boom';
 import prisma from '../prisma/prisma';
-import { findEvent, findEventFromCalendar } from '../services/eventsService';
+import {
+  findEvent,
+  findEventFromCalendar,
+  findPublicEvent,
+} from '../services/eventsService';
 
 /**
  * Route used to post event
@@ -44,6 +48,7 @@ const postEvent = async (
       ownerId: userId,
       calendarId: eventData.calendarId,
       eventTypeId: 1,
+      isPrivate: eventData.isPrivate,
       Attendees: {
         createMany: { data: allAttendeesData },
       },
@@ -166,4 +171,29 @@ const getCalendarEvents = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export { postEvent, patchEvent, getEvents, getCalendarEvents };
+/**
+ * Get public event start and end time (child events)
+ *
+ * @param req {Object} - Express request object
+ * @param res {Object} - Express response object
+ */
+const getPublicEvents = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { startTime, endTime } = req.query;
+
+    const eventResponse: any = await findPublicEvent(
+      Number(startTime),
+      Number(endTime)
+    );
+
+    if (!eventResponse) {
+      return res.boom(Boom.notFound('Events not found'));
+    }
+    return res.status(200).send({ data: eventResponse });
+  } catch (err) {
+    logger.error('Error while getting event', { err });
+    return res.boom(Boom.badImplementation());
+  }
+};
+
+export { postEvent, patchEvent, getEvents, getCalendarEvents, getPublicEvents };
