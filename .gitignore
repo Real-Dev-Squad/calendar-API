@@ -126,6 +126,3 @@ dist
 
 # Local config file
 config/local.*
-
-# Prisma Migrations
-prisma/migrations
