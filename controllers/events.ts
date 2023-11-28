@@ -96,6 +96,7 @@ const patchEvent = async (
       endTime: end,
       ownerId: userId,
       calendarId: eventData.calendarId,
+      isPrivate: eventData.isPrivate,
       // @prakash :: Event Type: Event. Id: 1
       eventTypeId: 1,
       // TODO: Need to fix updating attendees list
